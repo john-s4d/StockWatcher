@@ -10,19 +10,37 @@ namespace StockWatcher.Core
 {
     public class Plugins
     {
-        internal IDictionary<string, IOAuth> OAuth { get; }
-        internal IDictionary<string, IBrokerage> Brokerage { get; }
-        internal IDictionary<string, IMarketDataSource> MarketDataSource { get; }
-        internal IDictionary<string, IIndicator> Indicator { get; }
+        internal Dictionary<string, IOAuth> OAuth { get; } = new Dictionary<string, IOAuth>();
+        internal Dictionary<string, IBrokerage> Brokerage { get; } = new Dictionary<string, IBrokerage>();
+        internal Dictionary<string, IMarketDataSource> MarketDataSource { get; } = new Dictionary<string, IMarketDataSource>();
+        internal Dictionary<string, IIndicator> Indicator { get; } = new Dictionary<string, IIndicator>();
+        internal Dictionary<string, IStrategy> Strategy { get; } = new Dictionary<string, IStrategy>();
 
-        public Plugins()
+        public Plugins() { }
+
+        public IEnumerable<PluginLibrary> GetLibraries()
         {
-            OAuth = new Dictionary<string, IOAuth>();
+            throw new NotImplementedException();
         }
 
-        public void Load(List<string> pluginFiles)
+        public void Load(PluginLibrary library)
         {
-            
+            throw new NotImplementedException();
+        }
+
+        public void Remove(PluginLibrary library)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsEnabled(PluginInfoAttribute plugin)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetEnabled(PluginInfoAttribute plugin, bool enabled)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -21,24 +21,14 @@ namespace StockWatcher.UI
             InitializeComponent();
         }
 
-        public PluginsForm(Core.Plugins plugins)
+        public PluginsForm(Plugins plugins)
             : this()
         {
             _plugins = plugins;
-        }
-
-        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
-        {
-            PluginLibrary library = new PluginLibrary(fdLoadLibrary.FileName);
-            lbLibraries.Items.Add(library);            
-            lbLibraries.SelectedItem = library;
-
-            lbTitleVer.Text = $"{library.Title} - {library.Version}";
-            lbDescription.Text = library.Description;
-            lbPath.Text = library.AssemblyPath;
-
-            statusStrip1.Text = "Loaded Library";
-            
+            foreach(PluginLibrary library in _plugins.GetLibraries())
+            {
+                lbxLibraries.Items.Add(library);
+            }
         }
 
         private void btnLoadLibrary_Click(object sender, EventArgs e)
@@ -46,12 +36,39 @@ namespace StockWatcher.UI
             fdLoadLibrary.ShowDialog(this);
         }
 
+        private void fdLoadLibrary_FileOk(object sender, CancelEventArgs e)
+        {
+            PluginLibrary library = new PluginLibrary(fdLoadLibrary.FileName);
+            lbxLibraries.Items.Add(library);            
+            lbxLibraries.SelectedItem = library;
+
+            lbTitleVer.Text = $"{library.Title} - {library.Version}";
+            lbDescription.Text = library.Description;
+            lbPath.Text = library.AssemblyPath;
+
+            _plugins.Load(library);
+        }
+
         private void lbLibraries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (IPlugin plugin in ((PluginLibrary)lbLibraries.SelectedItem).Plugins)
-            {                
-                flPlugins.Controls.Add(new PluginInfoControl(plugin));
+            foreach (PluginInfoAttribute plugin in ((PluginLibrary)lbxLibraries.SelectedItem).Plugins)
+            {
+                PluginInfoControl control = new PluginInfoControl(plugin, _plugins.IsEnabled(plugin));
+                control.PluginEnabledStateChanged += pluginEnabledChanged;
+                flPlugins.Controls.Add(control);
             }
+        }
+
+        private void pluginEnabledChanged(PluginInfoAttribute plugin, bool enabled)
+        {
+            _plugins.SetEnabled(plugin, enabled);
+        }
+
+        private void btnRemoveLibrary_Click(object sender, EventArgs e)
+        {
+            PluginLibrary library = (PluginLibrary)lbxLibraries.SelectedItem;
+            _plugins.Remove(library);
+            lbxLibraries.Items.Remove(lbxLibraries.SelectedItem);
         }
     }
 }

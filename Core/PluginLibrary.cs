@@ -14,7 +14,7 @@ namespace StockWatcher.Core
         public string Description { get; }
         public Version Version { get; }
         public string Company { get; }
-        public List<IPlugin> Plugins { get; }
+        public List<PluginInfoAttribute> Plugins { get; }
 
         public PluginLibrary(string assemblyPath)
         {
@@ -27,13 +27,20 @@ namespace StockWatcher.Core
             Description = library.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
             Company = library.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
 
-            Plugins = new List<IPlugin>();
+            Plugins = new List<PluginInfoAttribute>();
 
-            foreach (Type pluginType in library.GetTypes())
+            foreach (Type pluginClass in library.GetTypes())
             {
-                if (pluginType.IsPublic && pluginType.GetInterface(typeof(IPlugin).FullName, true) != null)
+                if (pluginClass.IsPublic && pluginClass.GetInterface(typeof(IPlugin).FullName, true) != null)
                 {
-                    Plugins.Add((IPlugin)Activator.CreateInstance(library.GetType(pluginType.FullName)));
+                    if (Attribute.IsDefined(pluginClass, typeof(PluginInfoAttribute)))
+                    {
+                        Plugins.Add(pluginClass.GetCustomAttribute<PluginInfoAttribute>());
+                    }
+                    else
+                    {
+                        // TODO: Log error - plugin not properly defined.
+                    }
                 }
             }
         }

@@ -38,29 +38,28 @@ namespace StockWatcher.UI
             // 
             this.lbNameVer.AutoSize = true;
             this.lbNameVer.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.142858F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbNameVer.Location = new System.Drawing.Point(4, 4);
+            this.lbNameVer.Location = new System.Drawing.Point(31, 0);
             this.lbNameVer.Name = "lbNameVer";
-            this.lbNameVer.Size = new System.Drawing.Size(167, 35);
+            this.lbNameVer.Size = new System.Drawing.Size(119, 25);
             this.lbNameVer.TabIndex = 0;
             this.lbNameVer.Text = "lbNameVer";
             // 
             // cbEnabled
             // 
             this.cbEnabled.AutoSize = true;
-            this.cbEnabled.Location = new System.Drawing.Point(9, 77);
+            this.cbEnabled.Location = new System.Drawing.Point(3, 3);
             this.cbEnabled.Name = "cbEnabled";
-            this.cbEnabled.Size = new System.Drawing.Size(110, 29);
+            this.cbEnabled.Size = new System.Drawing.Size(22, 21);
             this.cbEnabled.TabIndex = 2;
-            this.cbEnabled.Text = "Enabled";
             this.cbEnabled.UseVisualStyleBackColor = true;
             this.cbEnabled.CheckedChanged += new System.EventHandler(this.cbEnabled_CheckedChanged);
             // 
             // lbDescription
             // 
             this.lbDescription.AutoSize = true;
-            this.lbDescription.Location = new System.Drawing.Point(4, 39);
+            this.lbDescription.Location = new System.Drawing.Point(3, 27);
             this.lbDescription.Name = "lbDescription";
-            this.lbDescription.Size = new System.Drawing.Size(174, 35);
+            this.lbDescription.Size = new System.Drawing.Size(124, 25);
             this.lbDescription.TabIndex = 3;
             this.lbDescription.Text = "lbDescription";
             // 
@@ -72,7 +71,7 @@ namespace StockWatcher.UI
             this.Controls.Add(this.cbEnabled);
             this.Controls.Add(this.lbNameVer);
             this.Name = "PluginInfoControl";
-            this.Size = new System.Drawing.Size(501, 123);
+            this.Size = new System.Drawing.Size(501, 72);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -10,7 +10,8 @@ using QuestradeApi.Websocket;
 using StockWatcher.Common;
 
 namespace QuestradeApi
-{
+{   
+    [PluginInfoAttribute(PluginType.Brokerage | PluginType.MarketData, "Questrade API", "0.1.0.0", "Implementation of Questrade Brokerage and MarketData")]
     public class Questrade : IBrokerage
     {
         public Questrade() { }
@@ -575,19 +576,6 @@ namespace QuestradeApi
         #endregion
 
         public DateTime GetTime()
-        {
-            throw new NotImplementedException();
-        }
-
-        public string Name { get; } = "Questrade Brokerage";
-
-        public Version Version { get; } = new Version(0, 1, 0);
-
-        public string Description { get; } = "An implementation of Questrade Broker API";
-
-        public bool Enabled { get; set; }
-
-        public void Initialize()
         {
             throw new NotImplementedException();
         }
