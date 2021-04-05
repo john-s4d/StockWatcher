@@ -11,7 +11,7 @@ using StockWatcher.Common;
 
 namespace QuestradeApi
 {   
-    [PluginInfoAttribute(PluginType.Brokerage | PluginType.MarketData, "Questrade API", "0.1.0.0", "Implementation of Questrade Brokerage and MarketData")]
+    [PluginAttribute("Questrade API", "0.1.0.0", "Implementation of Questrade Brokerage and MarketData")]
     public class Questrade : IBrokerage
     {
         public Questrade() { }

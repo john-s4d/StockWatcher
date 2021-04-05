@@ -10,8 +10,7 @@ namespace StockWatcher.UI
 {
     static class Program
     {
-        private const string APPLICATION_NAME = "StockWatcher";
-        private const string SETTINGS_FILENAME = "settings.json";
+        private const string APPLICATION_NAME = "StockWatcher";        
 
         private static Core.Program _core;
 
@@ -21,9 +20,9 @@ namespace StockWatcher.UI
         [STAThread]
         static void Main(string[] args)
         {
-            Core.Settings settings = Core.Settings.Load(Path.Combine(GetSettingsPath(), SETTINGS_FILENAME));
+            Core.AppData appData = new Core.AppData(GetAppDataPath());
 
-            _core = new Core.Program(settings);
+            _core = new Core.Program(appData);
 
             // Handling OAuth Callback
             if (_core.OAuthHook(args)) { return; } 
@@ -33,10 +32,10 @@ namespace StockWatcher.UI
             Application.Run(new MainForm(_core));
         }
 
-        private static string GetSettingsPath()
+        private static string GetAppDataPath()
         {
-            string settingsPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), APPLICATION_NAME);
-            return Directory.Exists(settingsPath) ? settingsPath : Directory.CreateDirectory(settingsPath).FullName;
+            string appDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), APPLICATION_NAME);
+            return Directory.Exists(appDataPath) ? appDataPath : Directory.CreateDirectory(appDataPath).FullName;
         }
     }
 }

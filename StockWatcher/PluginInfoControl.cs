@@ -1,4 +1,4 @@
-﻿using StockWatcher.Common;
+﻿using StockWatcher.Core;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,27 +13,24 @@ namespace StockWatcher.UI
 {
     public partial class PluginInfoControl : UserControl
     {
-        public delegate void PluginEnabledStateChangedEventHandler(PluginInfoAttribute plugin, bool enabled);
-        public event PluginEnabledStateChangedEventHandler PluginEnabledStateChanged;
-
-        private PluginInfoAttribute _plugin;
+        private PluginInfo _plugin;
         public PluginInfoControl()
         {
             InitializeComponent();
         }
 
-        public PluginInfoControl(PluginInfoAttribute plugin, bool enabled)
+        public PluginInfoControl(PluginInfo plugin)
             : this()
         {
             _plugin = plugin;
-            cbEnabled.Checked = enabled;
+            cbEnabled.Checked = plugin.Enabled;
             lbNameVer.Text = $"{plugin.Name} - {plugin.Version}";
             lbDescription.Text = plugin.Description;
         }
 
         private void cbEnabled_CheckedChanged(object sender, EventArgs e)
         {
-            PluginEnabledStateChanged?.Invoke(_plugin, cbEnabled.Checked);
+            _plugin.Enabled = cbEnabled.Checked;
         }
     }
 }

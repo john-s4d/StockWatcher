@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using StockWatcher.Common;
 using StockWatcher.Core;
 
 namespace StockWatcher.UI
@@ -25,7 +24,8 @@ namespace StockWatcher.UI
             : this()
         {
             _plugins = plugins;
-            foreach(PluginLibrary library in _plugins.GetLibraries())
+
+            foreach(PluginLibrary library in _plugins.Libraries)
             {
                 lbxLibraries.Items.Add(library);
             }
@@ -46,29 +46,24 @@ namespace StockWatcher.UI
             lbDescription.Text = library.Description;
             lbPath.Text = library.AssemblyPath;
 
-            _plugins.Load(library);
+            _plugins.Add(library);
         }
 
         private void lbLibraries_SelectedIndexChanged(object sender, EventArgs e)
         {
-            foreach (PluginInfoAttribute plugin in ((PluginLibrary)lbxLibraries.SelectedItem).Plugins)
+            foreach (PluginInfo plugin in ((PluginLibrary)lbxLibraries.SelectedItem).Plugins)
             {
-                PluginInfoControl control = new PluginInfoControl(plugin, _plugins.IsEnabled(plugin));
-                control.PluginEnabledStateChanged += pluginEnabledChanged;
+                PluginInfoControl control = new PluginInfoControl(plugin);                
                 flPlugins.Controls.Add(control);
             }
-        }
-
-        private void pluginEnabledChanged(PluginInfoAttribute plugin, bool enabled)
-        {
-            _plugins.SetEnabled(plugin, enabled);
         }
 
         private void btnRemoveLibrary_Click(object sender, EventArgs e)
         {
             PluginLibrary library = (PluginLibrary)lbxLibraries.SelectedItem;
-            _plugins.Remove(library);
             lbxLibraries.Items.Remove(lbxLibraries.SelectedItem);
+            
+            _plugins.Remove(library);            
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StockWatcher.QuestradeApi
 {
-    [PluginInfo(PluginType.OAuth, "Questrade OAuth", "0.1.0.0", "Implementation of Questrade OAuth")]
+    [Plugin("Questrade OAuth", "0.1.0.0", "Implementation of Questrade OAuth")]
     public class OAuth : IOAuth
     {
         public OAuth() { }

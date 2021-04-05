@@ -14,8 +14,7 @@ namespace StockWatcher.Core
         public string Description { get; }
         public Version Version { get; }
         public string Company { get; }
-        public List<PluginInfoAttribute> Plugins { get; }
-
+        public List<PluginInfo> Plugins { get; }
         public PluginLibrary(string assemblyPath)
         {
             Assembly library = Assembly.LoadFrom(assemblyPath);
@@ -27,15 +26,15 @@ namespace StockWatcher.Core
             Description = library.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
             Company = library.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
 
-            Plugins = new List<PluginInfoAttribute>();
+            Plugins = new List<PluginInfo>();
 
             foreach (Type pluginClass in library.GetTypes())
             {
                 if (pluginClass.IsPublic && pluginClass.GetInterface(typeof(IPlugin).FullName, true) != null)
                 {
-                    if (Attribute.IsDefined(pluginClass, typeof(PluginInfoAttribute)))
-                    {
-                        Plugins.Add(pluginClass.GetCustomAttribute<PluginInfoAttribute>());
+                    if (Attribute.IsDefined(pluginClass, typeof(PluginAttribute)))
+                    {   
+                        Plugins.Add(new PluginInfo(pluginClass));
                     }
                     else
                     {

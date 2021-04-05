@@ -11,23 +11,15 @@ namespace StockWatcher.Core
 {   
     public class Settings : ISettings
     {
-        public List<string> PluginDirectories { get; set; }
+        private const string LABEL = "settings";
+
+        private AppData _appdata;
+
         public int OAuthPipesTimeout { get; set; } = 10000;
 
-        public void Save(string settingsFile)
+        public Settings(AppData appData)
         {
-            string content = JsonConvert.SerializeObject(this);
-            File.WriteAllText(settingsFile, content);
-        }
-
-        public static Settings Load(string settingsFile)
-        {
-            if (File.Exists(settingsFile))
-            {   
-                return (Settings)JsonConvert.DeserializeObject(File.ReadAllText(settingsFile), typeof(Settings));
-            }
-            // TODO: Log settings file was not found, loading default
-            return new Settings();
+            _appdata = appData;
         }
     }
 }
