@@ -1,98 +1,63 @@
-﻿using StockWatcher.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using StockWatcher.Common;
 
 namespace StockWatcher.Core
 {
     public class Plugins
     {
-        private const string DATA_NAME = "plugins";
-        private AppData _appdata;
+        private Settings _settings;
 
-        internal List<IOAuth> OAuth { get; } = new List<IOAuth>();
-        internal List<IBrokerage> Brokerage { get; } = new List<IBrokerage>();
-        internal List<IMarketDataSource> MarketDataSource { get; } = new List<IMarketDataSource>();
-        internal List<IIndicator> Indicator { get; } = new List<IIndicator>();
-        internal List<IStrategy> Strategy { get; } = new List<IStrategy>();
+        public List<PluginLibrary> Libraries { get; private set; }
 
-        public IEnumerable<PluginLibrary> Libraries { get { return _libraries; } }
-
-
-        private List<PluginLibrary> _libraries = new List<PluginLibrary>();
-
-        public Plugins(AppData appData)
+        public Plugins(Settings settings)
         {
-            _appdata = appData;
-            LoadLibraries(_appdata.Read<List<PluginLibrary>>(DATA_NAME));
-        }
+            _settings = settings;
 
-        private void LoadLibraries(IEnumerable<PluginLibrary> libraries)
-        {
-            foreach (PluginLibrary library in libraries)
+            Libraries = _settings.Get<List<PluginLibrary>>(nameof(Plugins), nameof(Libraries));
+
+            foreach (PluginLibrary pluginLibrary in Libraries)
             {
-                LoadLibrary(library);
+                pluginLibrary.Load();
             }
         }
 
-        private void LoadLibrary(PluginLibrary library)
+        internal IEnumerable<T> GetInstances<T>() where T : class, IPlugin
         {
-            _libraries.Add(library);
-            foreach (PluginInfo plugin in library.Plugins)
+            List<T> result = new List<T>();
+
+            foreach (PluginLibrary pluginLibrary in Libraries)
             {
-                if (plugin.Enabled)
+                foreach (PluginClass pluginClass in pluginLibrary.Classes)
                 {
-                    Enable(plugin);
+                    if (pluginClass.Instance != null && typeof(T).IsAssignableFrom(pluginClass.Instance.GetType()) && !result.Contains((T)pluginClass.Instance))
+                    {
+                        foreach (PluginInterface pluginInterface in pluginClass.Interfaces)
+                        {
+                            if (pluginInterface.Enabled && pluginInterface.Type.Equals(typeof(T))) 
+                            {
+                                result.Add((T)pluginClass.Instance);
+                                break;
+                            }
+                        }
+                    }
                 }
-                plugin.OnEnabled += Enable;
-                plugin.OnDisabled += Disable;
             }
+            return result;
         }
 
-        private void Enable(PluginInfo plugin)
+        public void Save()
         {
-            if (plugin.Interfaces.Contains(typeof(IOAuth)))
-            {
-                OAuth.Add((IOAuth)Activator.CreateInstance(plugin.Class));
-            }
-
-            if (plugin.Interfaces.Contains(typeof(IBrokerage)))
-            {
-                Brokerage.Add((IBrokerage)Activator.CreateInstance(plugin.Class));
-            }
-
-            if (plugin.Interfaces.Contains(typeof(IMarketDataSource)))
-            {
-                MarketDataSource.Add((IMarketDataSource)Activator.CreateInstance(plugin.Class));
-            }
-
-            if (plugin.Interfaces.Contains(typeof(IIndicator)))
-            {
-                Indicator.Add((IIndicator)Activator.CreateInstance(plugin.Class));
-            }
-
-            if (plugin.Interfaces.Contains(typeof(IStrategy)))
-            {
-                Strategy.Add((IStrategy)Activator.CreateInstance(plugin.Class));
-            }
+            _settings.Set(nameof(Plugins), nameof(Libraries), Libraries);
         }
 
-        private void Disable(PluginInfo plugin)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Add(PluginLibrary library)
-        {
-            LoadLibrary(library);
+        public void AddLibrary(PluginLibrary library)
+        {   
+            Libraries.Add(library);            
         }
 
         public void Remove(PluginLibrary library)
         {
-            throw new NotImplementedException();
+            Libraries.Remove(library);            
         }
     }
 }

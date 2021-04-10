@@ -7,20 +7,20 @@ namespace StockWatcher.Common
     {
         public PluginAttribute() { }
 
-        public PluginAttribute(string name, Version version, string description)
+        public PluginAttribute(string title, Version version, string description)
             : this()
         {
-            Name = name;
-            Version = version;
+            Title = title;
+            Version = version.ToString(); // Ensure version is valid
             Description = description;
         }
 
-        public PluginAttribute(string name, string version, string description)
-            : this(name, new Version(version), description)
+        public PluginAttribute(string title, string version, string description)
+            : this(title, new Version(version), description)
         { }
 
-        public string Name { get; private set; }
-        public Version Version { get; private set; }
+        public string Title { get; private set; }
+        public string Version { get; private set; }
         public string Description { get; private set; }
     }
 }

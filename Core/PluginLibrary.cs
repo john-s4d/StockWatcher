@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Runtime.InteropServices;
+using Newtonsoft.Json;
 using StockWatcher.Common;
 
 namespace StockWatcher.Core
@@ -9,38 +9,55 @@ namespace StockWatcher.Core
     public class PluginLibrary
     {
         public string AssemblyPath { get; }
-        public Guid Guid { get; }
-        public string Title { get; }
-        public string Description { get; }
-        public Version Version { get; }
-        public string Company { get; }
-        public List<PluginInfo> Plugins { get; }
-        public PluginLibrary(string assemblyPath)
+        public List<PluginClass> Classes { get; } = new List<PluginClass>();
+
+        private Assembly _assembly;
+
+        [JsonIgnore]
+        public string Title { get; private set; }
+        [JsonIgnore]
+        public string Version { get; private set; }
+        [JsonIgnore]
+        public string Description { get; private set; }
+
+        [JsonConstructor]
+        public PluginLibrary(string assemblyPath, bool deepLoad = false)
         {
-            Assembly library = Assembly.LoadFrom(assemblyPath);
+            AssemblyPath = assemblyPath;
 
-            AssemblyPath = library.Location;
-            Guid = new Guid(library.GetCustomAttribute<GuidAttribute>().Value);
-            Version = new Version(library.GetCustomAttribute<AssemblyFileVersionAttribute>().Version);
-            Title = library.GetCustomAttribute<AssemblyTitleAttribute>().Title;
-            Description = library.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
-            Company = library.GetCustomAttribute<AssemblyCompanyAttribute>().Company;
-
-            Plugins = new List<PluginInfo>();
-
-            foreach (Type pluginClass in library.GetTypes())
+            if (deepLoad)
             {
-                if (pluginClass.IsPublic && pluginClass.GetInterface(typeof(IPlugin).FullName, true) != null)
+                Load(true);
+            }
+        }
+
+        internal void Load()
+        {
+            Load(false);
+        }
+
+        private void Load(bool deepLoad)
+        {
+            _assembly = Assembly.LoadFrom(AssemblyPath);
+
+            Title = _assembly.GetCustomAttribute<AssemblyTitleAttribute>().Title;
+            Version = new Version(_assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version).ToString(); // Ensure this version string is correct format 
+            Description = _assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description;
+
+            if (deepLoad)
+            {
+                foreach (Type classType in _assembly.GetTypes())
                 {
-                    if (Attribute.IsDefined(pluginClass, typeof(PluginAttribute)))
-                    {   
-                        Plugins.Add(new PluginInfo(pluginClass));
-                    }
-                    else
+                    if (classType.IsPublic && classType.GetInterface(typeof(IPlugin).FullName, true) != null)
                     {
-                        // TODO: Log error - plugin not properly defined.
+                        Classes.Add(new PluginClass(classType.FullName, _assembly, deepLoad));
                     }
                 }
+            }
+
+            foreach (PluginClass pluginClass in Classes)
+            {
+                pluginClass.LoadFrom(_assembly);
             }
         }
     }

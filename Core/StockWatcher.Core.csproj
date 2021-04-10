@@ -48,7 +48,8 @@
     <Compile Include="AppData.cs" />
     <Compile Include="OAuth.cs" />
     <Compile Include="Pipes.cs" />
-    <Compile Include="PluginInfo.cs" />
+    <Compile Include="PluginClass.cs" />
+    <Compile Include="PluginInterface.cs" />
     <Compile Include="PluginLibrary.cs" />
     <Compile Include="Plugins.cs" />
     <Compile Include="Program2.cs" />

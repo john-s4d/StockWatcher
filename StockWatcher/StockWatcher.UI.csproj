@@ -52,11 +52,17 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="PluginInfoControl.cs">
+    <Compile Include="PluginClassControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PluginInfoControl.Designer.cs">
-      <DependentUpon>PluginInfoControl.cs</DependentUpon>
+    <Compile Include="PluginClassControl.Designer.cs">
+      <DependentUpon>PluginClassControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PluginInterfaceControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PluginInterfaceControl.Designer.cs">
+      <DependentUpon>PluginInterfaceControl.cs</DependentUpon>
     </Compile>
     <Compile Include="PluginsForm.cs">
       <SubType>Form</SubType>
@@ -75,8 +81,11 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PluginInfoControl.resx">
-      <DependentUpon>PluginInfoControl.cs</DependentUpon>
+    <EmbeddedResource Include="PluginClassControl.resx">
+      <DependentUpon>PluginClassControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PluginInterfaceControl.resx">
+      <DependentUpon>PluginInterfaceControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PluginsForm.resx">
       <DependentUpon>PluginsForm.cs</DependentUpon>

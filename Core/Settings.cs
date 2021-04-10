@@ -21,5 +21,21 @@ namespace StockWatcher.Core
         {
             _appdata = appData;
         }
+
+        internal T Get<T>(string component, string label)
+             where T : new()
+        {
+            IDictionary<string, T> data = _appdata.Read<T>(component);
+            return data != null && data.ContainsKey(label) ? data[label] : new T();
+        }
+
+        internal void Set<T>(string component, string label, T value)
+            where T: new()
+        {
+            IDictionary<string, T> data = _appdata.Read<T>(component);
+            data = data == null ? new Dictionary<string, T>() : data;
+            data[label] = value;
+            _appdata.Write<T>(component, data);
+        }
     }
 }
