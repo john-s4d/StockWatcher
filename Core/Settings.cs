@@ -1,41 +1,92 @@
-﻿using Newtonsoft.Json;
-using StockWatcher.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 
 namespace StockWatcher.Core
-{   
-    public class Settings : ISettings
+{
+    public partial class Settings
     {
-        private const string LABEL = "settings";
 
-        private AppData _appdata;
-
-        public int OAuthPipesTimeout { get; set; } = 10000;
+        private AppData _appData;
+        private Dictionary<string, object> _values;
 
         public Settings(AppData appData)
         {
-            _appdata = appData;
+            _appData = appData;
+
+            _values = _appData.Read<Dictionary<string, object>>(nameof(Settings));
+
+            bool changed = false;
+
+            foreach (PropertyInfo property in typeof(Settings).GetProperties())
+            {
+                if (property.Name != "Item" && property.CanRead && property.CanWrite)
+                {
+                    string propertyName = property.Name.ToLower();
+
+                    if (_values.ContainsKey(propertyName))
+                    {
+                        property.SetValue(this, Convert.ChangeType(_values[propertyName], property.PropertyType));
+                    }
+                    else
+                    {
+                        _values.Add(propertyName, property.GetValue(this));
+                        changed = true;
+                    }
+                }
+            }
+            if (changed)
+            {
+                Save();
+            }
         }
 
-        internal T Get<T>(string component, string label)
-             where T : new()
+        public T Get<T>(string label)
+            where T : IConvertible
         {
-            IDictionary<string, T> data = _appdata.Read<T>(component);
-            return data != null && data.ContainsKey(label) ? data[label] : new T();
+            label = label.ToLower();
+            return _values.ContainsKey(label) ? (T)Convert.ChangeType(_values[label], typeof(T)) : default(T);
         }
 
-        internal void Set<T>(string component, string label, T value)
-            where T: new()
+        public void Set<T>(string label, T value)
+            where T : IConvertible
         {
-            IDictionary<string, T> data = _appdata.Read<T>(component);
-            data = data == null ? new Dictionary<string, T>() : data;
-            data[label] = value;
-            _appdata.Write<T>(component, data);
+
+            if (label == "Item")
+            {
+                throw new ArgumentException("Cannot set property Item.", nameof(label));
+            }
+
+            PropertyInfo property = typeof(Settings).GetProperty(label);
+
+            label = label.ToLower();
+
+            // Set the local dictionary
+            if (_values.ContainsKey(label))
+            {
+                if (value.Equals(Convert.ChangeType(_values[label], value.GetType())))
+                {
+                    return; // value didn't change
+                }
+                _values[label] = value;
+            }
+            else
+            {
+                _values.Add(label, value);
+            }
+
+            // Set the property
+            if (property != null)
+            {
+                property.SetValue(this, Convert.ChangeType(value, property.PropertyType));
+            }
+
+            Save();
+        }
+
+        private void Save()
+        {
+            _appData.Write(nameof(Settings), _values);
         }
     }
 }

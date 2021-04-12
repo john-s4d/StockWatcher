@@ -57,6 +57,7 @@
     <Compile Include="RegistryHandler.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Settings_Defaults.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\StockWatcher.Common.csproj">

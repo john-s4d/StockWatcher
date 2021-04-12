@@ -5,15 +5,15 @@ namespace StockWatcher.Core
 {
     public class Plugins
     {
-        private Settings _settings;
+        private AppData _appData;
 
         public List<PluginLibrary> Libraries { get; private set; }
 
-        public Plugins(Settings settings)
+        public Plugins(AppData appData)
         {
-            _settings = settings;
+            _appData = appData;
 
-            Libraries = _settings.Get<List<PluginLibrary>>(nameof(Plugins), nameof(Libraries));
+            Libraries = _appData.Read<List<PluginLibrary>>(nameof(Plugins));
 
             foreach (PluginLibrary pluginLibrary in Libraries)
             {
@@ -47,7 +47,7 @@ namespace StockWatcher.Core
 
         public void Save()
         {
-            _settings.Set(nameof(Plugins), nameof(Libraries), Libraries);
+            _appData.Write(nameof(Plugins), Libraries);
         }
 
         public void AddLibrary(PluginLibrary library)

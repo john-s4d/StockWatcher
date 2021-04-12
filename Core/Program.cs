@@ -10,14 +10,13 @@ namespace StockWatcher.Core
 {
     public class Program
     {
-        //public AppData AppData { get; internal set; }
         public Settings Settings { get; internal set; }
         public Plugins Plugins { get; internal set; }
 
         public Program(AppData appData)
         {
             Settings = new Settings(appData);
-            Plugins = new Plugins(Settings);            
+            Plugins = new Plugins(appData);            
         }
 
         public bool OAuthHook(string[] args)

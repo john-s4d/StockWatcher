@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
+using Newtonsoft.Json;
 
 namespace StockWatcher.Core
 {
     public class AppData
     {
+        // TODO: Implement read/write sync locks to prevent contention or race conditions
+
         private const string SUFFIX = "json";
         private const Formatting FORMATTING = Formatting.Indented;
 
@@ -13,18 +14,19 @@ namespace StockWatcher.Core
 
         public AppData(string path)
         {
-            _path = path;            
+            _path = path;
         }
 
-        public Dictionary<string,T> Read<T>(string label)
+        internal T Read<T>(string label)
+            where T : new()
         {
             string file = GetFilePath(label);
-            return File.Exists(file) ? (Dictionary<string, T>)JsonConvert.DeserializeObject(File.ReadAllText(file), typeof(IDictionary<string,T>)) : new Dictionary<string,T>();
+            return File.Exists(file) ? (T)JsonConvert.DeserializeObject(File.ReadAllText(file), typeof(T)) : new T();
         }
 
-        public void Write<T>(string label, IDictionary<string,T> data)
-        {   
-            // TODO: Async with read lock
+        public void Write<T>(string label, T data)
+            where T : new()
+        {
             File.WriteAllText(GetFilePath(label), JsonConvert.SerializeObject(data, FORMATTING));
         }
 
