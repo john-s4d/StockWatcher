@@ -8,29 +8,29 @@ namespace StockWatcher.Core
     {
 
         private AppData _appData;
-        private Dictionary<string, object> _values;
+        private Dictionary<string, object> _settings; 
 
         public Settings(AppData appData)
         {
             _appData = appData;
 
-            _values = _appData.Read<Dictionary<string, object>>(nameof(Settings));
+            // Dictionary is Case Insensitive
+            _settings = new Dictionary<string, object>(_appData.Read<Dictionary<string, object>>(nameof(Settings)), StringComparer.OrdinalIgnoreCase);
 
             bool changed = false;
 
+            // Sync properties and dictionary
             foreach (PropertyInfo property in typeof(Settings).GetProperties())
             {
-                if (property.Name != "Item" && property.CanRead && property.CanWrite)
+                if (property.CanRead && property.CanWrite)
                 {
-                    string propertyName = property.Name.ToLower();
-
-                    if (_values.ContainsKey(propertyName))
+                    if (_settings.ContainsKey(property.Name))
                     {
-                        property.SetValue(this, Convert.ChangeType(_values[propertyName], property.PropertyType));
+                        property.SetValue(this, Convert.ChangeType(_settings[property.Name], property.PropertyType));
                     }
                     else
                     {
-                        _values.Add(propertyName, property.GetValue(this));
+                        _settings.Add(property.Name.ToLower(), property.GetValue(this));
                         changed = true;
                     }
                 }
@@ -41,41 +41,32 @@ namespace StockWatcher.Core
             }
         }
 
-        public T Get<T>(string label)
+        public T Get<T>(string settingName)
             where T : IConvertible
         {
-            label = label.ToLower();
-            return _values.ContainsKey(label) ? (T)Convert.ChangeType(_values[label], typeof(T)) : default(T);
+            return _settings.ContainsKey(settingName) ? (T)Convert.ChangeType(_settings[settingName], typeof(T)) : default(T);
         }
 
-        public void Set<T>(string label, T value)
+        public void Set<T>(string settingName, T value)
             where T : IConvertible
         {
-
-            if (label == "Item")
-            {
-                throw new ArgumentException("Cannot set property Item.", nameof(label));
-            }
-
-            PropertyInfo property = typeof(Settings).GetProperty(label);
-
-            label = label.ToLower();
-
             // Set the local dictionary
-            if (_values.ContainsKey(label))
+            if (_settings.ContainsKey(settingName))
             {
-                if (value.Equals(Convert.ChangeType(_values[label], value.GetType())))
+                if (value.Equals(Convert.ChangeType(_settings[settingName], value.GetType())))
                 {
                     return; // value didn't change
                 }
-                _values[label] = value;
+                _settings[settingName] = value;
             }
             else
             {
-                _values.Add(label, value);
+                _settings.Add(settingName, value);
             }
 
             // Set the property
+            PropertyInfo property = typeof(Settings).GetProperty(settingName, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+
             if (property != null)
             {
                 property.SetValue(this, Convert.ChangeType(value, property.PropertyType));
@@ -86,7 +77,7 @@ namespace StockWatcher.Core
 
         private void Save()
         {
-            _appData.Write(nameof(Settings), _values);
+            _appData.Write(nameof(Settings), _settings);
         }
     }
 }

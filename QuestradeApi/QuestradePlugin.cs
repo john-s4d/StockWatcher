@@ -1,4 +1,5 @@
 ﻿using StockWatcher.Common;
+using StockWatcher.Common.MarketData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,19 +8,32 @@ using System.Threading.Tasks;
 
 namespace StockWatcher.QuestradeApi
 {
-   // [Plugin("Questrade OAuth", "0.1.0.0", "Implementation of Questrade OAuth")]
-    public class OAuth //: IOAuth
+    [PluginAttribute("Questrade API", "0.1.0.0", "Implementation of Questrade Brokerage and MarketData")]
+    public class QuestradePlugin : IMarketDataSource, IBrokerage, IOAuth, ISettings
     {
         private bool disposedValue;
 
-        public OAuth() { }
+        public string ClientId => throw new NotImplementedException();
 
-        public string ClientId => @"jMIAshGEshehvrHCzd7l58HCsPQFYQ";
-        public string AuthorizationEndpoint => @"https://login.questrade.com/oauth2/authorize";
-        public string TokenEndpoint => @"https://login.questrade.com/oauth2/token";
-        public string CallbackHostId => @"questrade";
+        public string CallbackHostId => throw new NotImplementedException();
 
-        public void Initialize()
+        public string AuthorizationEndpoint => throw new NotImplementedException();
+
+        public string TokenEndpoint => throw new NotImplementedException();
+
+        public Dictionary<string, IConvertible> Settings => throw new NotImplementedException();
+
+        public IEnumerable<IOption> GetOptions(ISymbol symbol, IEnumerable<IOptionFilter> filters)
+        {
+            throw new NotImplementedException();
+        }
+
+        public DateTime GetTime()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<ISymbol> Search(string prefix, int offset = 0)
         {
             throw new NotImplementedException();
         }
@@ -40,7 +54,7 @@ namespace StockWatcher.QuestradeApi
         }
 
         // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~OAuth()
+        // ~QuestradePlugin()
         // {
         //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         //     Dispose(disposing: false);

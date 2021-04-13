@@ -8,6 +8,7 @@ namespace StockWatcher.Core
 {
     public partial class Settings
     {
-        public int OAuthPipesTimeout { get; set; } = 10000;
+        // These properties all should have private setters. Callers should use Set() method instead, to keep the values synchronized. Private getters optional.
+        public int OAuthPipesTimeout { get; private set; } = 10000;
     }
 }

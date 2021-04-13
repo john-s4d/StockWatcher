@@ -27,7 +27,7 @@ namespace StockWatcher.UI
         {
             _pluginInterface = pluginInterface;
             cbEnabled.Checked = pluginInterface.Enabled;
-            cbEnabled.Text = pluginInterface.Name;
+            cbEnabled.Text = pluginInterface.ShortName;
         }
 
         private void cbEnabled_CheckedChanged(object sender, EventArgs e)

@@ -5,9 +5,8 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    [JsonObject]
-    public class ISettings
+    public interface ISettings : IPlugin
     {
-
+        Dictionary<string, IConvertible> Settings { get; }
     }
 }

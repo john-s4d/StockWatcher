@@ -6,7 +6,9 @@ namespace StockWatcher.Core
     public class PluginInterface
     {
         public event Action<PluginInterface, bool> OnEnabledChanged;
+
         public string Name { get; private set; }
+        public string ShortName { get; private set; }
 
         [JsonIgnore]
         internal Type Type { get; private set; }
@@ -33,7 +35,8 @@ namespace StockWatcher.Core
 
         public void LoadFrom(Type classType)
         {
-            Type = classType.GetInterface(Name);            
+            Type = classType.GetInterface(Name);
+            ShortName = Type.Name;
         }
     }
 }
