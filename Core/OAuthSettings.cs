@@ -1,4 +1,5 @@
-﻿using System;
+﻿using StockWatcher.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,9 +7,13 @@ using System.Threading.Tasks;
 
 namespace StockWatcher.Core
 {
-    public partial class Settings
+    public class OAuthSettings : Settings
     {
-        // These properties all should have private setters. Callers should use Set() method instead, to keep the values synchronized. Private getters optional.
+        public OAuthSettings()
+            : base(nameof(OAuthSettings), "OAuth")
+        { }
+
         public int OAuthPipesTimeout { get; private set; } = 10000;
+
     }
 }

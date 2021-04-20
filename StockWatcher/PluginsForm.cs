@@ -8,14 +8,14 @@ namespace StockWatcher.UI
 {
     public partial class PluginsForm : Form
     {
-        Plugins _plugins;
+        PluginsManager _plugins;
 
         public PluginsForm()
         {
             InitializeComponent();
         }
 
-        public PluginsForm(Plugins plugins)
+        public PluginsForm(PluginsManager plugins)
             : this()
         {
             _plugins = plugins;

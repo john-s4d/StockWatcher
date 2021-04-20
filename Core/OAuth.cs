@@ -51,7 +51,7 @@ namespace StockWatcher.Core
 
             string redirectUrl = BuildRedirectUri(oauth);
 
-            RegistryHandler registry = new RegistryHandler();
+            RegistryManager registry = new RegistryManager();
             registry.EnsureKeyExists(RootKey.CurrentUser, $"Software/Classes/{_appName}", $"URL:{_uriScheme}");
             registry.EnsureValueExists(RootKey.CurrentUser, $"Software/Classes/{_appName}", "URL Protocol", string.Empty);
             registry.EnsureKeyExists(RootKey.CurrentUser, $"Software/Classes/{_appName}/shell/open/command", $"\"{location}\" \"%1\"");

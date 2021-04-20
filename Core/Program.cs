@@ -10,18 +10,21 @@ namespace StockWatcher.Core
 {
     public class Program
     {
-        public Settings Settings { get; internal set; }
-        public Plugins Plugins { get; internal set; }
+        public SettingsManager Settings { get; internal set; }
+        public PluginsManager Plugins { get; internal set; }
 
-        public Program(AppData appData)
+        public Program(AppDataManager appData)
         {
-            Settings = new Settings(appData);
-            Plugins = new Plugins(appData);            
+            Settings = new SettingsManager(appData);
+            
+            Settings.Add(new OAuthSettings());
+
+            Plugins = new PluginsManager(appData, Settings);            
         }
 
         public bool OAuthHook(string[] args)
         {
-            return OAuth.OAuthHook(Plugins.GetInstances<IOAuth>(), args, Settings.OAuthPipesTimeout).Result;
+            return OAuth.OAuthHook(Plugins.GetInstances<IOAuth>(), args, Settings.Get<OAuthSettings>().OAuthPipesTimeout).Result;
         }
     }
 }

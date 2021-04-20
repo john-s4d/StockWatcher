@@ -11,17 +11,18 @@ namespace StockWatcher.QuestradeApi
     [PluginAttribute("Questrade API", "0.1.0.0", "Implementation of Questrade Brokerage and MarketData")]
     public class QuestradePlugin : IMarketDataSource, IBrokerage, IOAuth, ISettings
     {
-        private bool disposedValue;
 
-        public string ClientId => throw new NotImplementedException();
+        public Settings Settings { get; } = new Settings(nameof(QuestradePlugin), "Questrade");
 
-        public string CallbackHostId => throw new NotImplementedException();
+        public string CallbackHostId { get; } = @"questrade";
+        public string AuthorizationEndpoint { get; } = @"https://login.questrade.com/oauth2/authorize";
+        public string TokenEndpoint { get; } = @"https://login.questrade.com/oauth2/token";
+        public string ClientId => Settings["OAuthClientId"]?.ToString();
 
-        public string AuthorizationEndpoint => throw new NotImplementedException();
-
-        public string TokenEndpoint => throw new NotImplementedException();
-
-        public Dictionary<string, IConvertible> Settings => throw new NotImplementedException();
+        public QuestradePlugin()
+        {
+            Settings.Add(new Setting("OAuthClientId", "OAuth Client Id"));            
+        }
 
         public IEnumerable<IOption> GetOptions(ISymbol symbol, IEnumerable<IOptionFilter> filters)
         {
@@ -38,33 +39,9 @@ namespace StockWatcher.QuestradeApi
             throw new NotImplementedException();
         }
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects)
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
-                // TODO: set large fields to null
-                disposedValue = true;
-            }
-        }
-
-        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-        // ~QuestradePlugin()
-        // {
-        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-        //     Dispose(disposing: false);
-        // }
-
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
-            Dispose(disposing: true);
-            GC.SuppressFinalize(this);
+            throw new NotImplementedException();
         }
     }
 }

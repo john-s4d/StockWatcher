@@ -3,7 +3,7 @@ using System;
 
 namespace StockWatcher.Core
 {
-    public class RegistryHandler
+    public class RegistryManager
     {
         public void EnsureValueExists(RootKey rootKey, string keys, string valueName, string value)
         {

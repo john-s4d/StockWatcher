@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace StockWatcher.Core
 {
-    public class AppData
+    public class AppDataManager
     {
         // TODO: Implement read/write sync locks to prevent contention or race conditions
 
@@ -12,7 +12,7 @@ namespace StockWatcher.Core
 
         private string _path;
 
-        public AppData(string path)
+        public AppDataManager(string path)
         {
             _path = path;
         }

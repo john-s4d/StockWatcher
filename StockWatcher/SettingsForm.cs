@@ -1,26 +1,20 @@
-﻿using StockWatcher.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
+using StockWatcher.Common;
+using StockWatcher.Core;
 
 namespace StockWatcher.UI
 {
     public partial class SettingsForm : Form
     {
-        private Core.Settings _settings;
+        private SettingsManager _settings;
 
         public SettingsForm()
         {
             InitializeComponent();
         }
 
-        public SettingsForm(Core.Settings settings)
+        public SettingsForm(SettingsManager settings)
             : this()
         {
             _settings = settings;
@@ -29,7 +23,10 @@ namespace StockWatcher.UI
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-
+            foreach(Settings settings in _settings.Components)
+            {
+                lbCategories.Items.Add(settings);
+            }
         }
     }
 }

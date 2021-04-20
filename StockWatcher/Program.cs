@@ -20,7 +20,7 @@ namespace StockWatcher.UI
         [STAThread]
         static void Main(string[] args)
         {
-            Core.AppData appData = new Core.AppData(GetAppDataPath());
+            Core.AppDataManager appData = new Core.AppDataManager(GetAppDataPath());
 
             _core = new Core.Program(appData);
 
