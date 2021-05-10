@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("QuestradeApi")]
 [assembly: AssemblyDescription("Questrade API for StockWatcher")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("StockWatcher")]
+[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("StockWatcher.QuestradeApi")]
 [assembly: AssemblyCopyright("Copyright ©  2021")]
 [assembly: AssemblyTrademark("")]

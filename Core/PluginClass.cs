@@ -21,6 +21,7 @@ namespace StockWatcher.Core
         public string Version { get; private set; }
         [JsonIgnore]
         public string Description { get; private set; }
+        public bool Activated { get; internal set; }
 
         private Type _classType;
 

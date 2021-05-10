@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockWatcher.UI", "StockWat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockWatcher.Core", "Core\StockWatcher.Core.csproj", "{78C715BE-DF9A-4383-B602-84062D21B3D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockWatcher.QuestradeApi", "QuestradeApi\StockWatcher.QuestradeApi.csproj", "{943659D1-4868-4750-B4C9-B4380B50B342}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockWatcher.Questrade", "QuestradeApi\StockWatcher.Questrade.csproj", "{943659D1-4868-4750-B4C9-B4380B50B342}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{FF381CDA-6FE8-41E7-9B1C-E36DAD7AADAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{943659D1-4868-4750-B4C9-B4380B50B342} = {FF381CDA-6FE8-41E7-9B1C-E36DAD7AADAB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {668E817D-F905-452F-825F-452C2E195E4E}

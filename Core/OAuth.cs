@@ -18,11 +18,11 @@ namespace StockWatcher.Core
         static readonly string _appName = "stockwatcher";
         static readonly string _uriScheme = "stockwatcher";
 
-        readonly HttpClient client = new HttpClient();
+        readonly static HttpClient client = new HttpClient();
 
         internal async static Task<bool> OAuthHook(IEnumerable<IOAuth> oauths, string[] args, int timeout)
-        {
-            foreach(IOAuth oauth in oauths)
+        {            
+            foreach (IOAuth oauth in oauths)
             {
                 if (args.Length > 0 && args[0].StartsWith(BuildRedirectUri(oauth)))
                 {
@@ -45,7 +45,7 @@ namespace StockWatcher.Core
             return new UriBuilder(_uriScheme, callbackHost).Uri.AbsoluteUri;
         }
 
-        internal async Task<string> GetRefreshToken(IOAuth oauth, CancellationToken cancelToken)
+        internal static async Task<string> GetRefreshToken(IOAuth oauth, CancellationToken cancelToken)
         {
             string location = Assembly.GetEntryAssembly().Location;
 
@@ -84,7 +84,7 @@ namespace StockWatcher.Core
 
             var response = await client.PostAsync(tokenEndpoint, content);
 
-            return await response.Content.ReadAsStringAsync();
+            return response.Content.ReadAsStringAsync().Result;
         }
     }
 }

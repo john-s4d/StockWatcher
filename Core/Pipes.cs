@@ -11,28 +11,34 @@ namespace StockWatcher.Core
 {
     class Pipes
     {
-        internal static async Task SendText(string text, string pipeName, int timeout)
-        {
+        internal static Task SendText(string text, string pipeName, int timeout)
+        {   
             using (var client = new NamedPipeClientStream(pipeName))
             {
-                await client.ConnectAsync(timeout);
+                client.Connect(timeout);
 
                 using (StreamWriter writer = new StreamWriter(client))
                 {
                     writer.Write(text);
-                }
+                }                
             }
+            return Task.CompletedTask;
         }
 
         internal static async Task<string> ReceiveText(string pipeName, CancellationToken cancelToken)
         {
-            using (var server = new NamedPipeServerStream(pipeName))
+            PipeSecurity ps = new PipeSecurity();
+            System.Security.Principal.SecurityIdentifier sid = new System.Security.Principal.SecurityIdentifier(System.Security.Principal.WellKnownSidType.WorldSid, null);
+            PipeAccessRule par = new PipeAccessRule(sid, PipeAccessRights.ReadWrite, System.Security.AccessControl.AccessControlType.Allow);
+            ps.AddAccessRule(par);
+
+            using (var server = new NamedPipeServerStream(pipeName, PipeDirection.In, 1, PipeTransmissionMode.Message, PipeOptions.Asynchronous, 4096, 4096, ps))
             {
                 await server.WaitForConnectionAsync(cancelToken);
 
                 using (var reader = new StreamReader(server))
                 {
-                    return await reader.ReadToEndAsync();
+                    return reader.ReadToEndAsync().Result;
                 }
             }
         }

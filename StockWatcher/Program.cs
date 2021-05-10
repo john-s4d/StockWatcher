@@ -20,6 +20,19 @@ namespace StockWatcher.UI
         [STAThread]
         static void Main(string[] args)
         {
+            /*
+            // Global Exception Handling
+            GlobalExceptionHandler eHandler = new GlobalExceptionHandler();
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            Application.ThreadException += new System.Threading.ThreadExceptionEventHandler(eHandler.Thread_UnhandledException);
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(eHandler.App_UnhandledException);
+            */
+
+#if DEBUG
+
+            //MessageBox.Show("Attach Debugger Now");
+#endif
+
             Core.AppDataManager appData = new Core.AppDataManager(GetAppDataPath());
 
             _core = new Core.Program(appData);

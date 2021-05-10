@@ -32,8 +32,10 @@ namespace StockWatcher.UI
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lbCategories = new System.Windows.Forms.ListBox();
+            this.flpSettings = new System.Windows.Forms.FlowLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -51,12 +53,16 @@ namespace StockWatcher.UI
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(6);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.lbCategories);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.flpSettings);
             this.splitContainer1.Size = new System.Drawing.Size(1467, 809);
             this.splitContainer1.SplitterDistance = 486;
             this.splitContainer1.SplitterWidth = 7;
@@ -69,11 +75,20 @@ namespace StockWatcher.UI
             this.lbCategories.FormattingEnabled = true;
             this.lbCategories.ItemHeight = 24;
             this.lbCategories.Location = new System.Drawing.Point(0, 0);
-            this.lbCategories.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.lbCategories.Margin = new System.Windows.Forms.Padding(6);
             this.lbCategories.Name = "lbCategories";
             this.lbCategories.Size = new System.Drawing.Size(486, 809);
             this.lbCategories.TabIndex = 0;
             this.lbCategories.ValueMember = "Name";
+            this.lbCategories.SelectedIndexChanged += new System.EventHandler(this.lbCategories_SelectedIndexChanged);
+            // 
+            // flpSettings
+            // 
+            this.flpSettings.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
+            this.flpSettings.Location = new System.Drawing.Point(31, 83);
+            this.flpSettings.Name = "flpSettings";
+            this.flpSettings.Size = new System.Drawing.Size(889, 668);
+            this.flpSettings.TabIndex = 0;
             // 
             // SettingsForm
             // 
@@ -82,11 +97,12 @@ namespace StockWatcher.UI
             this.ClientSize = new System.Drawing.Size(1467, 831);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "SettingsForm";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.SettingsForm_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -99,5 +115,6 @@ namespace StockWatcher.UI
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox lbCategories;
+        private System.Windows.Forms.FlowLayoutPanel flpSettings;
     }
 }

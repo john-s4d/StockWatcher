@@ -8,7 +8,6 @@ namespace StockWatcher.Core
     public class SettingsManager
     {
         private AppDataManager _appData;
-        //private Dictionary<string, object> _settings;
 
         public IReadOnlyCollection<Settings> Components => _components.Values;
 

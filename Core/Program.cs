@@ -24,6 +24,7 @@ namespace StockWatcher.Core
 
         public bool OAuthHook(string[] args)
         {
+            //string[] args1 = { @"stockwatcher://callback.questrade/?code=cWHowIcA_IEphU8JGr1fQ-PvIXxqm7Ho0&state=p%3d5e3734f6-050e-485d-afd3-27e314f39b0c" };
             return OAuth.OAuthHook(Plugins.GetInstances<IOAuth>(), args, Settings.Get<OAuthSettings>().OAuthPipesTimeout).Result;
         }
     }

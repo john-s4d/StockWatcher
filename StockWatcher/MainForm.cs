@@ -15,10 +15,6 @@ namespace StockWatcher.UI
     {
         Core.Program _core;
 
-        SettingsForm _settings;
-        PluginsForm _plugins;
-        
-
         public MainForm(Core.Program core)
         {
             _core = core;
@@ -27,14 +23,12 @@ namespace StockWatcher.UI
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _settings = _settings == null ? new SettingsForm(_core.Settings) : _settings;
-            _settings.Show(this);
+            new SettingsForm(_core.Settings).Show(this);
         }
 
         private void pluginsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _plugins = _plugins == null ? new PluginsForm(_core.Plugins) : _plugins;
-            _plugins.Show(this);
+            new PluginsForm(_core.Plugins).Show(this);
         }
     }
 }

@@ -28,5 +28,15 @@ namespace StockWatcher.UI
                 lbCategories.Items.Add(settings);
             }
         }
+
+        private void lbCategories_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            flpSettings.Controls.Clear();
+
+            foreach(Setting setting in (Settings)lbCategories.SelectedItem)
+            {
+                flpSettings.Controls.Add(new SettingControl(setting));
+            }
+        }
     }
 }

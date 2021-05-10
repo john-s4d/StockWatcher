@@ -46,12 +46,12 @@
   <ItemGroup>
     <Compile Include="ErrorProcessing.cs" />
     <Compile Include="Notifications.cs" />
-    <Compile Include="OAuth.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Questrade.cs" />
     <Compile Include="QuestradeDataStructures.cs" />
     <Compile Include="QuestradeEventArgs.cs" />
     <Compile Include="QuestradePlugin.cs" />
+    <Compile Include="QuestradePluginSettings.cs" />
     <Compile Include="QuestradeWebsocket.cs" />
     <Compile Include="QuestradeWebsocketEvents.cs" />
   </ItemGroup>

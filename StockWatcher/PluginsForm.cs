@@ -19,11 +19,6 @@ namespace StockWatcher.UI
             : this()
         {
             _plugins = plugins;
-
-            foreach (PluginLibrary library in _plugins.Libraries)
-            {
-                lbxLibraries.Items.Add(library);
-            }
         }
 
         private void btnLoadLibrary_Click(object sender, EventArgs e)
@@ -79,6 +74,14 @@ namespace StockWatcher.UI
             lbxLibraries.Items.Remove(lbxLibraries.SelectedItem);
             _plugins.Remove(library);
             _plugins.Save();
+        }
+
+        private void PluginsForm_Load(object sender, EventArgs e)
+        {
+            foreach (PluginLibrary library in _plugins.Libraries)
+            {
+                lbxLibraries.Items.Add(library);
+            }
         }
     }
 }

@@ -8,12 +8,10 @@ using System.Threading.Tasks;
 namespace StockWatcher.Core
 {
     public class OAuthSettings : Settings
-    {
-        public OAuthSettings()
-            : base(nameof(OAuthSettings), "OAuth")
-        { }
+    {   
+        public override string Name { get; } = nameof(OAuthSettings);
+        public override string Label { get; } = "OAuth";
 
-        public int OAuthPipesTimeout { get; private set; } = 10000;
-
+        public int OAuthPipesTimeout { get; } = 20000;        
     }
 }
