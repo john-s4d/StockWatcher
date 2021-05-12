@@ -13,13 +13,13 @@ namespace StockWatcher.UI
 {
     public partial class SettingControl : UserControl
     {
-        private Setting _setting;
+        private SettingDefinition _setting;
         public SettingControl()
         {
             InitializeComponent();
         }
 
-        public SettingControl(Setting setting)
+        public SettingControl(SettingDefinition setting)
             : this()
         {
             _setting = setting;            
@@ -35,7 +35,7 @@ namespace StockWatcher.UI
             lblLabel.Text = _setting.Label;
             txtValue.Text = _setting.Value?.ToString();            
             ttDescription.SetToolTip(lblLabel, _setting.Description);
-            btnAction.Visible = _setting.HasAction;
+            btnAction.Visible = _setting.Action != null;
         }
 
         private void txtValue_TextChanged(object sender, EventArgs e)

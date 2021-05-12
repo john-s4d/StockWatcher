@@ -14,6 +14,7 @@ namespace StockWatcher.QuestradeApi
     {
         // *** IPlugin *** //
         public IPluginHost<IPlugin> Host { get; internal set; }
+
         public string Name { get; } = "Questrade";
         public bool Activated { get; internal set; }
 
@@ -25,20 +26,22 @@ namespace StockWatcher.QuestradeApi
         public string CallbackHostId { get; } = @"questrade";
         public string AuthorizationEndpoint { get; } = @"https://login.questrade.com/oauth2/authorize";
         public string TokenEndpoint { get; } = @"https://login.questrade.com/oauth2/token";
-        public string ClientId => (string)_settings.OAuthClientId.Value;
+        public string ClientId => _settings.OAuthClientId;
 
 
         // *** Instance *** //
         private QuestradePluginSettings _settings = new QuestradePluginSettings();
 
         public QuestradePlugin()
-        {   
-            _settings.OAuthClientId.SetAction(DoGetRefreshToken);
+        {
+            _settings.SetAction(nameof(_settings.OAuthClientId), DoGetRefreshToken);
         }
 
         private void DoGetRefreshToken()
         {
-            _settings.OAuthRefreshToken.Value = (Host as IOAuthHost)?.GetRefreshToken(this, new CancellationToken());            
+            _settings.OAuthRefreshToken =  (Host as IOAuthHost)?.GetRefreshToken(this, new CancellationToken());
+            //_settings.SetValue(nameof(_settings.OAuthRefreshToken), (Host as IOAuthHost)?.GetRefreshToken(this, new CancellationToken()));
+
         }
 
         public IEnumerable<IOption> GetOptions(ISymbol symbol, IEnumerable<IOptionFilter> filters)

@@ -2,58 +2,30 @@
 
 namespace StockWatcher.Common
 {
-    public class Setting
+    public class SettingDefinition
     {
 
         public delegate void ActionHandler();
 
         public string Label { get; }
-        public string Description { get; }
-        public IConvertible Value { get; set; }
+        public string Description { get; }        
 
-        private ActionHandler _onAction;
+        public Action Action { get; internal set; }
 
-        public bool HasAction { get { return _onAction != null; } }
-
-        public Setting(string label)
+        public SettingDefinition(string label)
         {
             Label = label;
         }
 
-        public Setting(string label, string description)
+        public SettingDefinition(string label, string description)
             : this(label)
         {   
             Description = description;
         }
 
-        public void SetAction(ActionHandler actionHandler)
-        {
-            _onAction = actionHandler;
-        }
-
-        /*
-        public Setting(string label, string description, ActionHandler actionHandler)
-            : this(label, description)
-        {   
-            _onAction = actionHandler;
-        }
-        
-        public Setting(string label, string description, IConvertible value)
-            : this(label,description)
-        {
-            Value = value;
-        }*/
-
-
-
         public void DoAction()
         {
-            _onAction?.Invoke();
+            Action?.Invoke();
         }
-    }
-
-    public enum SettingType
-    {
-        OAuthClientId
     }
 }

@@ -2,67 +2,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 using System.Text;
 
 namespace StockWatcher.Common
 {
-    public abstract class Settings : IEnumerable<Setting>
+    public abstract class Settings 
     {
-        private Dictionary<string, Setting> _settings = new Dictionary<string, Setting>();
+        private Dictionary<PropertyInfo, SettingDefinition> _definitions = new Dictionary<PropertyInfo, SettingDefinition>();
 
         public abstract string Name { get; }
-        public abstract string Label { get;}
+        public abstract string Label { get; }
 
-        /*
-        public Settings(string name, string label)
+        public void SetAction(string settingName, Action action)
         {
-            
-            // TODO: validation on name
-            Name = name;
-            Label = label;
-        }
-        
-        
-        public IConvertible this[string label]
-        {
-            get { return Get(label); }
-            set { Set(label, value); }
-        }*/
+            PropertyInfo property = GetPropertyInfo(settingName);
 
-        public IConvertible Get(string label) 
-        {
-            return _settings[label].Value;
+            if (!_definitions.ContainsKey(property))
+            {
+                _definitions.Add(property, new SettingDefinition(property.Name));
+            }
+            _definitions[property].Action = action;
         }
 
-        public void Set(string label, IConvertible value)
+        private PropertyInfo GetPropertyInfo(string name)
         {
-            _settings[label].Value = value;
+            return GetType().GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
         }
 
-        public void Add(string label, string description, IConvertible value)
-        {
-            _settings.Add(label, new Setting(label, description));
-            _settings[label].Value = value;
-        }
-
-        public void Add(Setting setting)
-        {
-            _settings.Add(setting.Label, setting);
-        }
-
-        public bool Contains(Setting setting)
-        {
-            return _settings.ContainsKey(setting.Label);
-        }
-
-        public IEnumerator<Setting> GetEnumerator()
-        {
-            return _settings.Values.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _settings.Values.GetEnumerator();
-        }
     }
 }

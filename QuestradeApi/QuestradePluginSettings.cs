@@ -1,6 +1,7 @@
 ﻿using StockWatcher.Common;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,13 @@ namespace StockWatcher.QuestradeApi
         public override string Name { get; } = nameof(QuestradePluginSettings);
         public override string Label { get; } = "QuestradePluginSettings";
 
-        public string OAuthClientId { get; internal set; }
+        internal string OAuthClientId { get; set; }
+
+        [Secret]
+        internal string OAuthRefreshToken { get; set; }
+
+        internal int MyReadOnlySetting { get; } = 11111;
+
 
     }
 }
