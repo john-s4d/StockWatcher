@@ -1,26 +1,29 @@
 ﻿using System;
+using System.Reflection;
 
 namespace StockWatcher.Common
 {
-    public class SettingDefinition
+    public class Setting
     {
-
         public delegate void ActionHandler();
 
-        public string Label { get; }
-        public string Description { get; }        
+        public Action Action { get; internal set; }        
+        public string Label { get; internal set; }
 
-        public Action Action { get; internal set; }
+        public PropertyInfo Property { get;}
+        public Settings Settings { get; }        
+        //public bool IsSecret { get;  }
 
-        public SettingDefinition(string label)
+        public IConvertible Value
         {
-            Label = label;
+            get { return Settings.GetValue(Property); }
+            set { Settings.SetValue(Property, Value); }
         }
 
-        public SettingDefinition(string label, string description)
-            : this(label)
-        {   
-            Description = description;
+        public Setting(Settings settings, PropertyInfo property)
+        {
+            Settings = settings;
+            Property = property;            
         }
 
         public void DoAction()

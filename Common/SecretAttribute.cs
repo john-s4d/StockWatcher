@@ -2,7 +2,9 @@
 
 namespace StockWatcher.Common
 {
-    public class SecretAttribute : Attribute
+    public class SettingAttribute : Attribute
     {
+        public bool Secret { get; set; }
+        public bool ReadOnly { get; set; }
     }
 }

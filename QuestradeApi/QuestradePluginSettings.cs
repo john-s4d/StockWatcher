@@ -1,25 +1,20 @@
 ﻿using StockWatcher.Common;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StockWatcher.QuestradeApi
 {
     public class QuestradePluginSettings : Settings
     {
         public override string Name { get; } = nameof(QuestradePluginSettings);
-        public override string Label { get; } = "QuestradePluginSettings";
+        public override string Label { get; } = "Questrade Plugin";
 
-        internal string OAuthClientId { get; set; }
+        public string OAuthRefreshToken { get; set; }
 
-        [Secret]
-        internal string OAuthRefreshToken { get; set; }
+        public string OAuthClientId { get; set; } = @"jMIAshGEshehvrHCzd7l58HCsPQFYQ";
 
-        internal int MyReadOnlySetting { get; } = 11111;
-
-
+        public QuestradePluginSettings()
+        {
+            Define(nameof(OAuthRefreshToken));
+            Define(nameof(OAuthClientId), "OAuth Client Id");
+        }
     }
 }

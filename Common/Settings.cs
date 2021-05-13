@@ -8,28 +8,84 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    public abstract class Settings 
+    public abstract class Settings : IEnumerable<Setting>, INotifyPropertyChanged
     {
-        private Dictionary<PropertyInfo, SettingDefinition> _definitions = new Dictionary<PropertyInfo, SettingDefinition>();
+        private Dictionary<PropertyInfo, Setting> _settings = new Dictionary<PropertyInfo, Setting>();        
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public abstract string Name { get; }
+
         public abstract string Label { get; }
 
-        public void SetAction(string settingName, Action action)
+        public void SetValue(string name, IConvertible value)
         {
-            PropertyInfo property = GetPropertyInfo(settingName);
+            SetValue(GetProperty(name), value);            
+        }
 
-            if (!_definitions.ContainsKey(property))
+        internal void SetValue(PropertyInfo property, IConvertible value)
+        {   
+            property.SetValue(this, value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property.Name));
+        }
+
+        internal IConvertible GetValue(PropertyInfo property)
+        {
+            return (IConvertible)property.GetValue(this);
+        }
+
+        public IConvertible GetValue(string name)
+        {
+            return GetValue(GetProperty(name));
+        }
+
+        public void SetAction(string name, Action action)
+        {
+            GetSetting(name).Action = action;
+        }
+
+        public void Define(string name, string label)
+        {
+            Setting setting = GetSetting(name);
+            setting.Label = label;            
+        }
+
+        public void Define(string name)
+        {
+            _ = GetSetting(name);            
+        }
+
+        private PropertyInfo GetProperty(string name)
+        {   
+            return GetType().GetProperty(name);
+        }
+
+        private Setting GetSetting(string name)
+        {
+            return GetSetting(GetProperty(name));
+        }
+
+        private Setting GetSetting(PropertyInfo property)
+        {
+            Setting setting;
+
+            if (!_settings.TryGetValue(property, out setting))
             {
-                _definitions.Add(property, new SettingDefinition(property.Name));
+                setting = new Setting(this, property);
+                _settings.Add(property, setting);
             }
-            _definitions[property].Action = action;
+            
+            return setting;
         }
 
-        private PropertyInfo GetPropertyInfo(string name)
+        public IEnumerator<Setting> GetEnumerator()
         {
-            return GetType().GetProperty(name, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance);
+            return _settings.Values.GetEnumerator();
         }
 
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return _settings.Values.GetEnumerator();
+        }
     }
 }
