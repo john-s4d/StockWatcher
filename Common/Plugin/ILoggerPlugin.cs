@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    public interface IIndicator : IPlugin
+    public interface ILoggerPlugin : IPlugin
     {
         
     }

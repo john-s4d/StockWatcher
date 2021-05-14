@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    public interface ILoggerHost : IPluginHost<ILogger>
+    public interface ILoggerHost : IPluginHost<ILoggerPlugin>
     {
         Logger Logger { get; }
     }

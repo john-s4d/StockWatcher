@@ -4,7 +4,7 @@ using StockWatcher.Common.MarketData;
 
 namespace StockWatcher.Common
 {
-    public interface IMarketDataSource : IPlugin
+    public interface IMarketDataSourcePlugin : IPlugin
     {
         DateTime GetTime();
         IEnumerable<ISymbol> Search(string prefix, int offset = 0);

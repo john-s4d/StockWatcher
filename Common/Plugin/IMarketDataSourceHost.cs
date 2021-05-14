@@ -4,7 +4,7 @@ using StockWatcher.Common.MarketData;
 
 namespace StockWatcher.Common
 {
-    public interface IMarketDataSourceHost : IPluginHost<IMarketDataSource>
+    public interface IMarketDataSourceHost : IPluginHost<IMarketDataSourcePlugin>
     {
         
     }

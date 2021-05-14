@@ -24,7 +24,7 @@ namespace StockWatcher.UI
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            foreach(Settings settings in _settings.Components)
+            foreach(ISettingsPlugin settings in _settings.Components)
             {
                 lbCategories.Items.Add(settings);
             }

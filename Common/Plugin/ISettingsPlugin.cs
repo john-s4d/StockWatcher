@@ -5,7 +5,7 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    public interface ISettings : IPlugin
+    public interface ISettingsPlugin : IPlugin
     {   
         Settings Settings { get; }
     }

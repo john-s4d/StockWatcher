@@ -7,7 +7,7 @@ namespace StockWatcher.Common
 {
 
     public delegate void RefreshTokenCallback(string token);
-    public interface IOAuth : IPlugin
+    public interface IOAuthPlugin : IPlugin
     {
         //event Action<IOAuth, CancellationToken, RefreshTokenCallback> GetRefreshToken;
 

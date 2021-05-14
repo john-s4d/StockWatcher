@@ -5,7 +5,7 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    public interface ISettingsHost : IPluginHost<ISettings>
+    public interface ISettingsHost : IPluginHost<ISettingsPlugin>
     {
         //Settings Settings { get; }
     }

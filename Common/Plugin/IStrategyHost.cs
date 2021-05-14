@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StockWatcher.Common
 {
-    public interface IStrategyHost : IPluginHost<IStrategy>
+    public interface IStrategyHost : IPluginHost<IStrategyPlugin>
     {
     }
 }

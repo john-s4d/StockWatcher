@@ -13,7 +13,7 @@ namespace StockWatcher.Core
 
         private List<PluginLibrary> _libraries;
 
-        public PluginsManager(AppDataManager appData, SettingsManager settings)
+        public PluginsManager(AppDataManager appData, Program _core)
         {
             _appData = appData;
             _libraries = _appData.Read<List<PluginLibrary>>("plugins");
@@ -35,21 +35,14 @@ namespace StockWatcher.Core
                 }
             }
 
-        }
+        }        
 
-        internal T GetInstance<T>(string name)
-            where T : class, IPlugin
+        public List<IPlugin> Get(string name)
         {
-            return GetInstancesOrNamedInstance<T>(name)[0];
+            return Get<IPlugin>(name);
         }
 
-        internal List<T> GetInstances<T>()
-            where T : class, IPlugin
-        {
-            return GetInstancesOrNamedInstance<T>();
-        }
-
-        private List<T> GetInstancesOrNamedInstance<T>(string name = null)
+        internal List<T> Get<T>(string name = null)
             where T : class, IPlugin
         {
             List<T> result = new List<T>();

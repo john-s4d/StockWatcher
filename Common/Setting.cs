@@ -7,12 +7,13 @@ namespace StockWatcher.Common
     {
         public delegate void ActionHandler();
 
-        public Action Action { get; internal set; }        
+        public Action Action { get; internal set; }
+
+        public string Name => Property.Name;
         public string Label { get; internal set; }
 
-        public PropertyInfo Property { get;}
-        public Settings Settings { get; }        
-        //public bool IsSecret { get;  }
+        internal PropertyInfo Property { get;}
+        internal Settings Settings { get; }        
 
         public IConvertible Value
         {

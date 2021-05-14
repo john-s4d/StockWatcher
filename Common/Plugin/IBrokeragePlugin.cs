@@ -2,7 +2,7 @@
 
 namespace StockWatcher.Common
 {
-    public interface IBrokerage : IPlugin
+    public interface IBrokeragePlugin : IPlugin
     {
         DateTime GetTime();
 

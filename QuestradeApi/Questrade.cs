@@ -165,7 +165,7 @@ namespace QuestradeApi
             get { return _auth.refresh_token; }
         }
 
-        public IOAuth OAuth => throw new NotImplementedException();
+        public IOAuthPlugin OAuth => throw new NotImplementedException();
 
 
         #endregion

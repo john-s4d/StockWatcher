@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace StockWatcher.QuestradeApi
 {
     [PluginAttribute("Questrade API", "0.1.0.0", "Implementation of Questrade Brokerage and MarketData")]
-    public class QuestradePlugin : IMarketDataSource, IBrokerage, IOAuth, ISettings
+    public class QuestradePlugin : IMarketDataSourcePlugin, IBrokeragePlugin, IOAuthPlugin, ISettingsPlugin
     {
         // *** IPlugin *** //
         public IPluginHost<IPlugin> Host { get; internal set; }

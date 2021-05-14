@@ -22,7 +22,7 @@ namespace StockWatcher.Core
 
         
 
-        public string GetRefreshToken(IOAuth oauth, CancellationToken cancellationToken)
+        public string GetRefreshToken(IOAuthPlugin oauth, CancellationToken cancellationToken)
         {   
            return OAuth.GetRefreshToken(oauth, cancellationToken).Result;
         }

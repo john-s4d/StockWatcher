@@ -20,9 +20,9 @@ namespace StockWatcher.Core
 
         readonly static HttpClient client = new HttpClient();
 
-        internal async static Task<bool> OAuthHook(IEnumerable<IOAuth> oauths, string[] args, int timeout)
+        internal async static Task<bool> OAuthHook(IEnumerable<IOAuthPlugin> oauths, string[] args, int timeout)
         {            
-            foreach (IOAuth oauth in oauths)
+            foreach (IOAuthPlugin oauth in oauths)
             {
                 if (args.Length > 0 && args[0].StartsWith(BuildRedirectUri(oauth)))
                 {
@@ -39,13 +39,13 @@ namespace StockWatcher.Core
             return false;
         }
 
-        private static string BuildRedirectUri(IOAuth oauth)
+        private static string BuildRedirectUri(IOAuthPlugin oauth)
         {
             string callbackHost = $"callback.{oauth.CallbackHostId}";
             return new UriBuilder(_uriScheme, callbackHost).Uri.AbsoluteUri;
         }
 
-        internal static async Task<string> GetRefreshToken(IOAuth oauth, CancellationToken cancelToken)
+        internal static async Task<string> GetRefreshToken(IOAuthPlugin oauth, CancellationToken cancelToken)
         {
             string location = Assembly.GetEntryAssembly().Location;
 

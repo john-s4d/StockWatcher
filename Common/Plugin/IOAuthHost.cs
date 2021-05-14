@@ -5,9 +5,9 @@ using System.Threading;
 
 namespace StockWatcher.Common
 {
-    public interface IOAuthHost : IPluginHost<IOAuth>
+    public interface IOAuthHost : IPluginHost<IOAuthPlugin>
     {
-        string GetRefreshToken(IOAuth oAuth, CancellationToken cancelationToken);
+        string GetRefreshToken(IOAuthPlugin oAuth, CancellationToken cancelationToken);
 
     }
 }

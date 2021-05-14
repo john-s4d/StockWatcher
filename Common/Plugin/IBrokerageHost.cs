@@ -2,7 +2,7 @@
 
 namespace StockWatcher.Common
 {
-    public interface IBrokerageHost : IPluginHost<IBrokerage>
+    public interface IBrokerageHost : IPluginHost<IBrokeragePlugin>
     {   
 
 
