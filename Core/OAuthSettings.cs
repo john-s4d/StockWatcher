@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StockWatcher.Core
 {
-    public class OAuthSettings : Settings
+    public class OAuthSettings : SettingsContainer
     {   
         public override string Name { get; } = nameof(OAuthSettings);
         public override string Label { get; } = "OAuth";

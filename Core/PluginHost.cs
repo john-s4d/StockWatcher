@@ -18,7 +18,7 @@ namespace StockWatcher.Core
         public Guid Id { get; }
 
         public Logger Logger => throw new System.NotImplementedException();
-        public Settings Settings ;
+        public SettingsContainer Settings ;
 
         
 

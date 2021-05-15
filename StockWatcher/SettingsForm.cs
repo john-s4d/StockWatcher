@@ -34,9 +34,9 @@ namespace StockWatcher.UI
         {
             flpSettings.Controls.Clear();
 
-            Settings selectedSettings = (Settings)lbCategories.SelectedItem;
+            SettingsContainer selectedSettings = (SettingsContainer)lbCategories.SelectedItem;
 
-            foreach (Setting setting in selectedSettings)
+            foreach (Setting setting in selectedSettings.Values)
             {
                 flpSettings.Controls.Add(new SettingControl(setting));
             }

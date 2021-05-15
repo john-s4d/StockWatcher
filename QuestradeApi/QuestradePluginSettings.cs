@@ -2,7 +2,7 @@
 
 namespace StockWatcher.QuestradeApi
 {
-    public class QuestradePluginSettings : Settings
+    public class QuestradePluginSettings : SettingsContainer
     {
         public override string Name { get; } = nameof(QuestradePluginSettings);
         public override string Label { get; } = "Questrade Plugin";

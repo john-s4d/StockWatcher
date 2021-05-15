@@ -13,15 +13,15 @@ namespace StockWatcher.Common
         public string Label { get; internal set; }
 
         internal PropertyInfo Property { get;}
-        internal Settings Settings { get; }        
+        internal SettingsContainer Settings { get; }        
 
         public IConvertible Value
         {
-            get { return Settings.GetValue(Property); }
-            set { Settings.SetValue(Property, Value); }
+            get { return Settings[Name].Value; }
+            set { Settings[Name].Value = Value; }
         }
 
-        public Setting(Settings settings, PropertyInfo property)
+        public Setting(SettingsContainer settings, PropertyInfo property)
         {
             Settings = settings;
             Property = property;            

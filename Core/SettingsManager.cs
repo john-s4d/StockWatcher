@@ -8,17 +8,17 @@ namespace StockWatcher.Core
 {
     public class SettingsManager
     {
-        public IReadOnlyCollection<Settings> Components => _components.AsReadOnly();
+        public IReadOnlyCollection<SettingsContainer> Components => _components.AsReadOnly();
 
         private AppDataManager _appData;
 
-        private List<Settings> _components;
+        private List<SettingsContainer> _components;
 
         internal SettingsManager(AppDataManager appData, Program _core)
         {
             _appData = appData;
 
-            Dictionary<string, Settings> components = new Dictionary<string, Settings>();
+            Dictionary<string, SettingsContainer> components = new Dictionary<string, SettingsContainer>();
 
             // TODO: Loading/unloading a plugin from pluginform should trigger reloading the settings from those plugins
 
@@ -29,14 +29,14 @@ namespace StockWatcher.Core
             }
 
             // Override with the persisted settings
-            foreach (ISettingsPlugin settingsPlugin in _appData.Read<List<Settings>>("settings"))
+            foreach (ISettingsPlugin settingsPlugin in _appData.Read<List<SettingsContainer>>("settings"))
             {
                 if (components.ContainsKey(settingsPlugin.Name))
                 {
-                    foreach(Setting setting in settingsPlugin.Settings)
+                    foreach(Setting setting in settingsPlugin.Settings.Values)
                     {
-                        components[settingsPlugin.Name].SetValue(setting.Name, setting.Value);
-                        components[settingsPlugin.Name].SetAction(setting.Name, setting.Action);
+                        components[settingsPlugin.Name][setting.Name].Value = setting.Value;
+                        //components[settingsPlugin.Name][setting.Name].Action = setting.Action;
                     }
                 }
                 else
@@ -48,17 +48,17 @@ namespace StockWatcher.Core
             _components = components.Values.ToList();
         }
 
-        internal void Add<T>(T settings) where T : Settings
+        internal void Add<T>(T settings) where T : SettingsContainer
         {
             _components.Add(settings);
         }
 
         internal T Get<T>()
-            where T : Settings
+            where T : SettingsContainer
         {
             T result = null;
 
-            foreach (Settings settings in _components)
+            foreach (SettingsContainer settings in _components)
             {
                 if (settings.GetType().Equals(typeof(T)))
                 {
