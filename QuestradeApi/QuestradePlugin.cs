@@ -28,7 +28,7 @@ namespace StockWatcher.QuestradeApi
         public string TokenEndpoint { get; } = @"https://login.questrade.com/oauth2/token";
         public string ClientId => _settings.OAuthClientId;
 
-        public SettingsContainer Settings => _settings;
+        public SettingsDictionary Settings => _settings;
 
 
         // *** Instance *** //
@@ -41,7 +41,7 @@ namespace StockWatcher.QuestradeApi
 
         private void DoGetRefreshToken()
         {
-            _settings[nameof(_settings.OAuthRefreshToken)].Value = (Host as IOAuthHost)?.GetRefreshToken(this, new CancellationToken());            
+            _settings[nameof(_settings.OAuthRefreshToken)] = (Host as IOAuthHost)?.GetRefreshToken(this, new CancellationToken());
 
             //_settings.SetValue(nameof(_settings.OAuthRefreshToken), (Host as IOAuthHost)?.GetRefreshToken(this, new CancellationToken()));
 

@@ -1,35 +1,33 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace StockWatcher.Common
 {
-    public class Setting
+    public class Setting : INotifyPropertyChanged
     {
-        public delegate void ActionHandler();
+        public string Name { get; internal set; } 
+        public string Label { get; internal set; }             
+        public Action OnAction { get; internal set; }
 
-        public Action Action { get; internal set; }
-
-        public string Name => Property.Name;
-        public string Label { get; internal set; }
-
-        internal PropertyInfo Property { get;}
-        internal SettingsContainer Settings { get; }        
-
-        public IConvertible Value
-        {
-            get { return Settings[Name].Value; }
-            set { Settings[Name].Value = Value; }
+        private IConvertible _value;
+        public IConvertible Value {
+            get => _value;
+            set
+            {   
+                if (_value != value)
+                {
+                    _value = value;
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Value)));
+                }
+            }
         }
 
-        public Setting(SettingsContainer settings, PropertyInfo property)
-        {
-            Settings = settings;
-            Property = property;            
-        }
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public void DoAction()
         {
-            Action?.Invoke();
+            OnAction?.Invoke();
         }
     }
 }

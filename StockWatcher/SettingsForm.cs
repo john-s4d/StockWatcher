@@ -24,7 +24,7 @@ namespace StockWatcher.UI
 
         private void SettingsForm_Load(object sender, EventArgs e)
         {
-            foreach(ISettingsPlugin settings in _settings.Components)
+            foreach(SettingsDictionary settings in _settings.Components)
             {
                 lbCategories.Items.Add(settings);
             }
@@ -34,9 +34,9 @@ namespace StockWatcher.UI
         {
             flpSettings.Controls.Clear();
 
-            SettingsContainer selectedSettings = (SettingsContainer)lbCategories.SelectedItem;
+            SettingsDictionary selectedSettings = (SettingsDictionary)lbCategories.SelectedItem;
 
-            foreach (Setting setting in selectedSettings.Values)
+            foreach (Setting setting in selectedSettings.Settings)
             {
                 flpSettings.Controls.Add(new SettingControl(setting));
             }

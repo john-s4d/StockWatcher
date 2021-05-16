@@ -7,6 +7,6 @@ namespace StockWatcher.Common
 {
     public interface ISettingsPlugin : IPlugin
     {   
-        SettingsContainer Settings { get; }
+        SettingsDictionary Settings { get; }
     }
 }

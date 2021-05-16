@@ -7,11 +7,16 @@ using System.Threading.Tasks;
 
 namespace StockWatcher.Core
 {
-    public class OAuthSettings : SettingsContainer
+    public class OAuthSettings : SettingsDictionary
     {   
         public override string Name { get; } = nameof(OAuthSettings);
         public override string Label { get; } = "OAuth";
+        public int OAuthPipesTimeout { get; set; } = 20000;
 
-        public int OAuthPipesTimeout { get; } = 20000;        
+        public OAuthSettings()
+        {
+            SetLabel(nameof(OAuthPipesTimeout), "OAuth Pipes Timeout (ms)");
+        }
+
     }
 }

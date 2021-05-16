@@ -1,8 +1,9 @@
 ﻿using StockWatcher.Common;
+using System;
 
 namespace StockWatcher.QuestradeApi
 {
-    public class QuestradePluginSettings : SettingsContainer
+    public class QuestradePluginSettings : SettingsDictionary
     {
         public override string Name { get; } = nameof(QuestradePluginSettings);
         public override string Label { get; } = "Questrade Plugin";
@@ -13,8 +14,12 @@ namespace StockWatcher.QuestradeApi
 
         public QuestradePluginSettings()
         {
-            Define(nameof(OAuthRefreshToken));
-            Define(nameof(OAuthClientId), "OAuth Client Id");
+            SetLabel(nameof(OAuthClientId), "OAuth Client Id");
+        }
+
+        internal new void SetAction(string key, Action action)
+        {
+            base.SetAction(key, action);
         }
     }
 }
