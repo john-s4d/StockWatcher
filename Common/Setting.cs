@@ -6,8 +6,10 @@ namespace StockWatcher.Common
 {
     public class Setting : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public string Name { get; internal set; } 
-        public string Label { get; internal set; }             
+        public string Label { get; internal set; }
         public Action OnAction { get; internal set; }
 
         private IConvertible _value;
@@ -22,8 +24,6 @@ namespace StockWatcher.Common
                 }
             }
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
 
         public void DoAction()
         {

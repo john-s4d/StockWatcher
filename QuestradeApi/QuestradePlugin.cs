@@ -32,10 +32,11 @@ namespace StockWatcher.QuestradeApi
 
 
         // *** Instance *** //
-        private QuestradePluginSettings _settings = new QuestradePluginSettings();
+        private QuestradePluginSettings _settings;
 
         public QuestradePlugin()
         {
+            _settings = new QuestradePluginSettings();
             _settings.SetAction(nameof(_settings.OAuthClientId), DoGetRefreshToken);
         }
 

@@ -28,6 +28,7 @@ namespace StockWatcher.UI
             {
                 lbCategories.Items.Add(settings);
             }
+            lbCategories.SelectedItem = _settings.Components[0];
         }
 
         private void lbCategories_SelectedIndexChanged(object sender, EventArgs e)
@@ -38,8 +39,15 @@ namespace StockWatcher.UI
 
             foreach (Setting setting in selectedSettings.Settings)
             {
-                flpSettings.Controls.Add(new SettingControl(setting));
+                SettingControl settingControl = new SettingControl(setting);
+                settingControl.Leave += SettingControl_Leave;
+                flpSettings.Controls.Add(settingControl);
             }
+        }
+
+        private void SettingControl_Leave(object sender, EventArgs e)
+        {
+            _settings.Save();
         }
     }
 }

@@ -35,13 +35,17 @@ namespace StockWatcher.UI
         {
             lblLabel.Text = _setting.Label;
             txtValue.Text = _setting.Value?.ToString();            
-            //ttDescription.SetToolTip(lblLabel, _setting.Description);
+            
             btnAction.Visible = _setting.OnAction != null;
+            //ttDescription.SetToolTip(lblLabel, _setting.Description);
         }
 
         private void txtValue_TextChanged(object sender, EventArgs e)
         {
-            _setting.Value = txtValue.Text;
+            if (_setting.Value == null || _setting.Value.ToString() != txtValue.Text)
+            {
+                _setting.Value = txtValue.Text;                
+            }
         }
     }
 }

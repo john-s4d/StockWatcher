@@ -29,13 +29,19 @@ namespace StockWatcher.Core
                 foreach (PluginInterface pluginInterface in pluginClass.Interfaces)
                 {
                     if (pluginInterface.Enabled && !pluginClass.Instance.Activated)
-                    {   
+                    {
                         pluginClass.Instance.Activate(new PluginHost(pluginClass.Instance));
+
+                        if (typeof(ISettingsPlugin).IsAssignableFrom(pluginInterface.Type))
+                        {
+                            // TODO: hookup settings
+                        }
+
                     }
                 }
             }
 
-        }        
+        }
 
         public List<IPlugin> Get(string name)
         {
@@ -53,16 +59,15 @@ namespace StockWatcher.Core
                 {
                     if (pluginInterface.Enabled && pluginInterface.Type.Equals(typeof(T)))
                     {
-                        if (!string.IsNullOrEmpty(name) && pluginClass.Name.Equals(name))
+                        if (name == null || pluginClass.Name.Equals(name))
                         {
                             result.Add((T)pluginClass.Instance);
+                        }
+                        if (name != null)
+                        {
                             return result;
                         }
-                        else if (string.IsNullOrEmpty(name))
-                        {
-                            result.Add((T)pluginClass.Instance);
-                            break;
-                        }
+                        break;
                     }
                 }
             }

@@ -8,57 +8,68 @@ namespace StockWatcher.Core
 {
     public class SettingsManager
     {
-        public IReadOnlyCollection<SettingsDictionary> Components => _components.AsReadOnly();
+        public IReadOnlyList<SettingsDictionary> Components => _components.Values.ToList();
 
         private AppDataManager _appData;
 
-        private List<SettingsDictionary> _components;
+        private Dictionary<string, SettingsDictionary> _components = new Dictionary<string, SettingsDictionary>();
 
         internal SettingsManager(AppDataManager appData, Program _core)
         {
             _appData = appData;
 
-            Dictionary<string, SettingsDictionary> components = new Dictionary<string, SettingsDictionary>();
-
             // TODO: Loading/unloading a plugin from pluginform should trigger reloading the settings from those plugins
+            Load(_core.Plugins.Get<ISettingsPlugin>());
+        }
 
-            // Get from the plugins first
-            foreach (ISettingsPlugin settingsPlugin in _core.Plugins.Get<ISettingsPlugin>())
+        internal void Load(IEnumerable<ISettingsPlugin> plugins)
+        {
+
+            Dictionary<string, Type> typeMap = new Dictionary<string, Type>();
+
+            foreach (ISettingsPlugin settingsPlugin in plugins)
             {
-                components.Add(settingsPlugin.Name, settingsPlugin.Settings);
+                _components.Add(settingsPlugin.Settings.Name, settingsPlugin.Settings);
+                typeMap.Add(settingsPlugin.Settings.Name, settingsPlugin.Settings.GetType());
             }
 
+            // TODO: Get Types for other settings.
+
+            Dictionary<string, SettingsDictionary> componentsPersisted = _appData.Read<Dictionary<string, SettingsDictionary>>("settings", new SettingsDictionaryJsonConverter(typeMap));
+
             // Override with the persisted settings
-            foreach (ISettingsPlugin settingsPlugin in _appData.Read<List<SettingsDictionary>>("settings"))
+            foreach (string key in componentsPersisted.Keys)
             {
-                if (components.ContainsKey(settingsPlugin.Name))
+                if (_components.ContainsKey(key))
                 {
-                    foreach(Setting setting in settingsPlugin.Settings.Values)
+                    foreach (Setting settingPersisted in componentsPersisted[key].Values)
                     {
-                        components[settingsPlugin.Name][setting.Name] = setting.Value;
-                        //components[settingsPlugin.Name][setting.Name].Action = setting.Action;
+                        _components[key][settingPersisted.Name] = settingPersisted.Value;
                     }
                 }
                 else
                 {
-                    components.Add(settingsPlugin.Name, settingsPlugin.Settings);
+                    _components.Add(key, componentsPersisted[key]);
                 }
             }
-
-            _components = components.Values.ToList();
         }
+
+
+
 
         internal void Add<T>(T settings) where T : SettingsDictionary
         {
-            _components.Add(settings);
+            _components.Add(settings.Name, settings);
         }
 
         internal T Get<T>()
             where T : SettingsDictionary
         {
+            //return (T)_components[typeof(T)];
+            
             T result = null;
 
-            foreach (SettingsDictionary settings in _components)
+            foreach (SettingsDictionary settings in _components.Values)
             {
                 if (settings.GetType().Equals(typeof(T)))
                 {
@@ -72,7 +83,7 @@ namespace StockWatcher.Core
             return result;
         }
 
-        private void Save()
+        public void Save()
         {
             _appData.Write("settings", _components);
         }

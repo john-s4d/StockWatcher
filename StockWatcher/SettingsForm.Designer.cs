@@ -42,10 +42,10 @@ namespace StockWatcher.UI
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(28, 28);
-            this.statusStrip1.Location = new System.Drawing.Point(0, 809);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 532);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 26, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1467, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(1067, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -53,7 +53,7 @@ namespace StockWatcher.UI
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(6);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -63,9 +63,9 @@ namespace StockWatcher.UI
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.flpSettings);
-            this.splitContainer1.Size = new System.Drawing.Size(1467, 809);
-            this.splitContainer1.SplitterDistance = 486;
-            this.splitContainer1.SplitterWidth = 7;
+            this.splitContainer1.Size = new System.Drawing.Size(1067, 532);
+            this.splitContainer1.SplitterDistance = 353;
+            this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 2;
             // 
             // lbCategories
@@ -73,11 +73,11 @@ namespace StockWatcher.UI
             this.lbCategories.DisplayMember = "Label";
             this.lbCategories.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lbCategories.FormattingEnabled = true;
-            this.lbCategories.ItemHeight = 24;
+            this.lbCategories.ItemHeight = 16;
             this.lbCategories.Location = new System.Drawing.Point(0, 0);
-            this.lbCategories.Margin = new System.Windows.Forms.Padding(6);
+            this.lbCategories.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.lbCategories.Name = "lbCategories";
-            this.lbCategories.Size = new System.Drawing.Size(486, 809);
+            this.lbCategories.Size = new System.Drawing.Size(353, 532);
             this.lbCategories.TabIndex = 0;
             this.lbCategories.ValueMember = "Name";
             this.lbCategories.SelectedIndexChanged += new System.EventHandler(this.lbCategories_SelectedIndexChanged);
@@ -85,19 +85,20 @@ namespace StockWatcher.UI
             // flpSettings
             // 
             this.flpSettings.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpSettings.Location = new System.Drawing.Point(31, 83);
+            this.flpSettings.Location = new System.Drawing.Point(23, 55);
+            this.flpSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.flpSettings.Name = "flpSettings";
-            this.flpSettings.Size = new System.Drawing.Size(889, 668);
+            this.flpSettings.Size = new System.Drawing.Size(647, 404);
             this.flpSettings.TabIndex = 0;
             // 
             // SettingsForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1467, 831);
+            this.ClientSize = new System.Drawing.Size(1067, 554);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.Margin = new System.Windows.Forms.Padding(6);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "SettingsForm";
             this.Text = "Settings";
             this.Load += new System.EventHandler(this.SettingsForm_Load);

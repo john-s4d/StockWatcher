@@ -9,11 +9,9 @@ using System.Linq;
 
 namespace StockWatcher.Common
 {
-    public abstract class SettingsDictionary : IDictionary<string, IConvertible>
+    public class SettingsDictionary : IDictionary<string, IConvertible>
     {
-
-        public IReadOnlyCollection<Setting> Settings => _settings.Values.ToList();
-
+        
         private Dictionary<string, Setting> _settings = new Dictionary<string, Setting>(StringComparer.OrdinalIgnoreCase);
         private Dictionary<string, IConvertible> _values = new Dictionary<string, IConvertible>(StringComparer.OrdinalIgnoreCase);
 
@@ -21,18 +19,25 @@ namespace StockWatcher.Common
             BindingFlags.IgnoreCase |
             BindingFlags.DeclaredOnly |
             BindingFlags.Instance |
-            BindingFlags.Public;
+            BindingFlags.Public;//| 
+           // BindingFlags.SetProperty;
 
-        public abstract string Name { get; }
+        public virtual string Name { get; protected set; }
 
-        public abstract string Label { get; }
+        [JsonIgnore]
+        public virtual string Label { get; protected set; }
 
+        [JsonIgnore]
+        public IReadOnlyCollection<Setting> Settings => _settings.Values.ToList();
+
+        [JsonIgnore]
         public ICollection<string> Keys => _values.Keys;
 
+        [JsonIgnore]
         public ICollection<IConvertible> Values => _values.Values;
-
+        [JsonIgnore]
         public int Count => _values.Count;
-
+        [JsonIgnore]
         public bool IsReadOnly => false;
 
         public IConvertible this[string key]
@@ -43,10 +48,18 @@ namespace StockWatcher.Common
 
         public SettingsDictionary()
         {
+            
             foreach (PropertyInfo property in GetProperties())
             {
                 Add(property.Name, (IConvertible)property.GetValue(this));
             }
+        }
+        
+        public SettingsDictionary(string name, string label)
+            : this()
+        {
+            Name = name;
+            Label = label;
         }
 
         private IConvertible GetValue(string key)
@@ -54,7 +67,7 @@ namespace StockWatcher.Common
             PropertyInfo property = GetProperty(key);
             IConvertible value = property == null ? _values[key] : (IConvertible)property.GetValue(this);
 
-            // Assume if the property has changed but _values did not, the property was set directly.
+            // Assume that if the property has changed but _values did not, the property was set directly.
             // Set the value now. This isn't ideal, but better late than never.
             if (value != _values[key])
             {
@@ -65,11 +78,12 @@ namespace StockWatcher.Common
 
         private void SetValue(string key, IConvertible value)
         {
-            if (!GetProperty(key).CanWrite)
+            PropertyInfo property = GetProperty(key);
+            if (property != null && !property.CanWrite)
             {
-                throw new InvalidOperationException($"Property {key} cannot be set.");
+                throw new InvalidOperationException($"Property '{key}' cannot be set.");
             }
-            _values[key] = value;
+            _settings[key].Value = value;
         }
 
         protected void SetAction(string key, Action action)
@@ -85,15 +99,17 @@ namespace StockWatcher.Common
         private PropertyInfo GetProperty(string key)
         {
             PropertyInfo property = GetType().GetProperty(key, BINDING_FLAGS);
-            if (!IsReserved(property)) { 
-                return property; 
+            if (!IsReserved(property))
+            {
+                return property;
             }
             return property;
         }
 
         private IEnumerable<PropertyInfo> GetProperties()
         {
-            foreach (PropertyInfo property in GetType().GetProperties(BINDING_FLAGS))
+            Type type = GetType();
+            foreach (PropertyInfo property in type.GetProperties(BINDING_FLAGS))
             {
                 if (!IsReserved(property))
                 {
@@ -102,24 +118,48 @@ namespace StockWatcher.Common
             }
         }
 
-        private bool IsReserved(PropertyInfo property)
+        // TODO: There must be a better way to ignore certain properties.
+        public bool IsReserved(PropertyInfo property)
+        {   
+            return 
+                property.Name.Equals(nameof(Name)) || 
+                property.Name.Equals(nameof(Label)) || 
+                property.Name.Equals(nameof(Settings)) ||
+                property.Name.Equals(nameof(Keys)) ||
+                property.Name.Equals(nameof(Count)) ||
+                property.Name.Equals(nameof(Keys)) ||
+                property.Name.Equals(nameof(Values)) ||
+                property.Name.Equals(nameof(IsReadOnly)) ||
+                property.Name.Equals("Item")
+                ;
+        }
+
+        public void Add(string key, IConvertible value, string label)
         {
-            return property.Name.Equals(nameof(Name)) || property.Name.Equals(nameof(Label));
+            Setting setting = new Setting()
+            {
+                Name = key,
+                Value = value,
+                Label = label
+            };
+            _settings.Add(key, setting);
+            _values.Add(key, value);
+
+            setting.PropertyChanged += OnValueChanged;
         }
 
         public void Add(string key, IConvertible value)
         {
-            Setting setting = new Setting() { Name = key, Value = value };
-            _settings.Add(key, setting);
-            _values.Add(key, value);
-            setting.PropertyChanged += OnValueChanged;
+            Add(key, value, key);
         }
 
         private void OnValueChanged(object sender, PropertyChangedEventArgs e)
         {
-            Setting setting = (sender as Setting);
-            GetProperty(setting.Name)?.SetValue(this, setting.Value);
-            _settings[setting.Name].Value = setting.Value;
+            Setting setting = (Setting)sender;
+            PropertyInfo property = GetProperty(setting.Name);
+
+            property?.SetValue(this, Convert.ChangeType(setting.Value, property.PropertyType));
+            _values[setting.Name] = setting.Value;
         }
 
         public bool ContainsKey(string key)
