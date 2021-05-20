@@ -71,7 +71,7 @@ namespace StockWatcher.Common
             // Set the value now. This isn't ideal, but better late than never.
             if (value != _values[key])
             {
-                _values[key] = value;
+               //_values[key] = value;
             }
             return value;
         }

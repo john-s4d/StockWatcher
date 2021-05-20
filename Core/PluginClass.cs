@@ -8,7 +8,7 @@ namespace StockWatcher.Core
 {
     public class PluginClass
     {
-        public event Action<PluginClass, bool> OnInstanceEnabledChanged;
+        public event Action<PluginInterface, bool> OnInstanceEnabledChanged;
 
         public string Name { get; set; }
         public List<PluginInterface> Interfaces { get; set; } = new List<PluginInterface>();
@@ -91,7 +91,7 @@ namespace StockWatcher.Core
                 Instance.Dispose();
                 Instance = null;
             }
-            OnInstanceEnabledChanged?.Invoke(this, enabled);
+            OnInstanceEnabledChanged?.Invoke(sender, enabled);
         }
     }
 }

@@ -15,10 +15,14 @@ namespace StockWatcher.Core
 
         public Program(AppDataManager appData)
         {
-            Plugins = new PluginsManager(appData, this);
-            Settings = new SettingsManager(appData, this);
+            Plugins = new PluginsManager(appData);
+            Settings = new SettingsManager(appData);
 
-            Settings.Add(new OAuthSettings());
+            Plugins.Load();
+
+            Settings.Merge(Plugins.Get<ISettingsPlugin>());
+            Settings.Merge(new OAuthSettings());
+            Settings.Load();
         }
 
         public bool OAuthHook(string[] args)

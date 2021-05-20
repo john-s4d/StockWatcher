@@ -7,15 +7,19 @@ namespace StockWatcher.Core
 {
     public class PluginsManager
     {
-        private AppDataManager _appData;
+        private AppDataManager _appData;        
 
         public IReadOnlyCollection<PluginLibrary> Libraries => _libraries.AsReadOnly();
 
         private List<PluginLibrary> _libraries;
 
-        public PluginsManager(AppDataManager appData, Program _core)
+        public PluginsManager(AppDataManager appData)
         {
             _appData = appData;
+        }
+
+        public void Load() { 
+
             _libraries = _appData.Read<List<PluginLibrary>>("plugins");
 
             foreach (PluginLibrary pluginLibrary in _libraries)
@@ -31,16 +35,15 @@ namespace StockWatcher.Core
                     if (pluginInterface.Enabled && !pluginClass.Instance.Activated)
                     {
                         pluginClass.Instance.Activate(new PluginHost(pluginClass.Instance));
-
-                        if (typeof(ISettingsPlugin).IsAssignableFrom(pluginInterface.Type))
-                        {
-                            // TODO: hookup settings
-                        }
-
                     }
                 }
+                pluginClass.OnInstanceEnabledChanged += PluginClass_OnInstanceEnabledChanged;
             }
+        }
 
+        private void PluginClass_OnInstanceEnabledChanged(PluginInterface plugin, bool enabled)
+        {
+            // TODO: Update Settings with new plugin info
         }
 
         public List<IPlugin> Get(string name)
@@ -104,8 +107,9 @@ namespace StockWatcher.Core
         }
 
         public void AddLibrary(PluginLibrary library)
-        {
+        {            
             _libraries.Add(library);
+
         }
 
         public void Remove(PluginLibrary library)
