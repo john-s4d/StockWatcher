@@ -1,30 +1,61 @@
 ﻿using StockWatcher.Common;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace StockWatcher.Core
 {
-    internal class PluginHost : 
-        IPluginHost<IPlugin>, 
-        IBrokerageHost, IIndicatorHost, ILoggerHost, IMarketDataSourceHost, IOAuthHost, ISettingsHost, IStrategyHost
-        
-        
+    internal class PluginHost :
+                    IPluginHost<IPlugin>,
+                    IBrokerageHost,
+                    IIndicatorHost,
+                    ILoggerHost,
+                    IMarketDataSourceHost,
+                    IOAuthHost,
+                    ISettingsHost,
+                    IStrategyHost
     {
-        public PluginHost(IPlugin instance)
-        {
-            Id = Guid.NewGuid();
+        public Guid Id { get; } = Guid.NewGuid();
+        
+        
+        
+        private Program _core;
+
+        public PluginHost(Program core)
+        {   
+            _core = core;
         }
 
-        public Guid Id { get; }
+        //** IOAuthHost **//
+        public async Task<string> GetRefreshToken(IOAuthPlugin oauth, CancellationToken cancellationToken)
+        {
+            return await OAuth.GetRefreshToken(oauth, cancellationToken);
+        }
 
-        public Logger Logger => throw new System.NotImplementedException();
-        public SettingsDictionary Settings ;
+        //** ILoggerHost **//
+        public void Write(string message, LogLevel level = LogLevel.DEBUG)
+        {
+            throw new NotImplementedException();
+        }
 
-        
+        public void Write(Exception e, LogLevel level = LogLevel.DEBUG)
+        {
+            throw new NotImplementedException();
+        }
 
-        public string GetRefreshToken(IOAuthPlugin oauth, CancellationToken cancellationToken)
-        {   
-           return OAuth.GetRefreshToken(oauth, cancellationToken).Result;
+        public void Trace(LogLevel level = LogLevel.DEBUG)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Trace(string append, LogLevel level = LogLevel.DEBUG)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dump(string message, object obj, LogLevel level = LogLevel.DEBUG)
+        {
+            throw new NotImplementedException();
         }
     }
 }

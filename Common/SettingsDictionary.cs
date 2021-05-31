@@ -68,10 +68,10 @@ namespace StockWatcher.Common
             IConvertible value = property == null ? _values[key] : (IConvertible)property.GetValue(this);
 
             // Assume that if the property has changed but _values did not, the property was set directly.
-            // Set the value now. This isn't ideal, but better late than never.
+            // Set the value now. This isn't ideal, but better late than never.            
             if (value != _values[key])
             {
-               //_values[key] = value;
+               _values[key] = value;
             }
             return value;
         }
@@ -94,6 +94,11 @@ namespace StockWatcher.Common
         protected void SetLabel(string key, string label)
         {
             _settings[key].Label = label;
+        }
+
+        protected void SetEncrypted(string key)
+        {
+            throw new NotImplementedException();
         }
 
         private PropertyInfo GetProperty(string key)

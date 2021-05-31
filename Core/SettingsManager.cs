@@ -15,14 +15,13 @@ namespace StockWatcher.Core
         private Dictionary<string, SettingsDictionary> _components = new Dictionary<string, SettingsDictionary>();
         Dictionary<string, Type> _typeMap = new Dictionary<string, Type>();
 
-        internal SettingsManager(AppDataManager appData)
+        internal SettingsManager() { }
+
+        internal void Load(AppDataManager appData)
         {
             _appData = appData;
-        }
 
-        internal void Load()
-        {
-            Dictionary<string, SettingsDictionary> components = _appData.Read<Dictionary<string, SettingsDictionary>>("settings", new SettingsDictionaryJsonConverter(_typeMap));
+            Dictionary<string, SettingsDictionary> components = appData.Read<Dictionary<string, SettingsDictionary>>("settings", new SettingsDictionaryJsonConverter(_typeMap));
 
             foreach (SettingsDictionary settings in components.Values)
             {
@@ -38,34 +37,42 @@ namespace StockWatcher.Core
             }
         }
 
+        internal void Remove(ISettingsPlugin plugin)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void Merge(ISettingsPlugin plugin)
+        {
+            Merge(plugin.Settings);
+        }
+
         internal void Merge<T>(T settings)
             where T : SettingsDictionary, new()
         {
+            if (_components.ContainsKey(settings.Name))
+            {
+                foreach (string key in settings.Keys.ToList())
+                {
+                    SettingsDictionary component = _components[settings.Name];
+
+                    if (!component.ContainsKey(key))
+                    {
+                        component.Add(key, settings[key]);
+                    }
+
+                    component[key] = settings[key];
+                }
+            }
+            else
+            {
+                _components.Add(settings.Name, settings);
+            }
+
             if (!_typeMap.ContainsKey(settings.Name))
             {
                 _typeMap.Add(settings.Name, settings.GetType());
             }
-
-            if (!_components.ContainsKey(settings.Name))
-            {
-                _components.Add(settings.Name, settings);
-                //_components.Add(settings.Name, (SettingsDictionary)Activator.CreateInstance(settings.GetType()));
-            }
-
-            foreach (string key in settings.Keys.ToList())
-            {
-                SettingsDictionary component = _components[settings.Name];
-
-                if (!component.ContainsKey(key))
-                {
-                    component.Add(key, settings[key]);
-                }
-
-                component[key] = settings[key];
-            }
-
-
-            
         }
 
         internal T Get<T>()

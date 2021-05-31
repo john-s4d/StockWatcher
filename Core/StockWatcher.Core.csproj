@@ -50,6 +50,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppDataManager.cs" />
+    <Compile Include="LoggingManager.cs" />
     <Compile Include="OAuth.cs" />
     <Compile Include="Pipes.cs" />
     <Compile Include="PluginClass.cs" />

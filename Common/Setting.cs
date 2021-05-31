@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Reflection;
+using System.Threading;
 
 namespace StockWatcher.Common
 {
@@ -27,7 +28,11 @@ namespace StockWatcher.Common
 
         public void DoAction()
         {
-            OnAction?.Invoke();
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                OnAction?.Invoke();
+            }).Start();
         }
     }
 }

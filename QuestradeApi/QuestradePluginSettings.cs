@@ -1,4 +1,5 @@
-﻿using StockWatcher.Common;
+﻿using Newtonsoft.Json;
+using StockWatcher.Common;
 using System;
 
 namespace StockWatcher.QuestradeApi
@@ -9,10 +10,14 @@ namespace StockWatcher.QuestradeApi
             : base(nameof(QuestradePluginSettings), "Questrade")
         {
             SetLabel(nameof(OAuthClientId), "OAuth Client Id");
+
+            // SetEncrypted(nameof(OAuthRefreshToken)); // TODO: Implement Encryption
         }
 
-        public string OAuthRefreshToken { get; set; }
-        public string OAuthClientId { get; set; } = @"jMIAshGEshehvrHCzd7l58HCsPQFYQ";        
+        public string OAuthClientId { get; }        
+
+        //[SettingEncrypted]
+        internal string OAuthRefreshToken { get; }
 
         internal new void SetAction(string key, Action action)
         {

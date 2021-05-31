@@ -20,11 +20,11 @@ namespace StockWatcher.Core
 
         readonly static HttpClient client = new HttpClient();
 
-        internal async static Task<bool> OAuthHook(IEnumerable<IOAuthPlugin> oauths, string[] args, int timeout)
+        internal async static Task<bool> OAuthHook(IEnumerable<IOAuthPlugin> oauthPlugins, string[] args, int timeout)
         {            
-            foreach (IOAuthPlugin oauth in oauths)
+            foreach (IOAuthPlugin oauthPlugin in oauthPlugins)
             {
-                if (args.Length > 0 && args[0].StartsWith(BuildRedirectUri(oauth)))
+                if (args.Length > 0 && args[0].StartsWith(BuildRedirectUri(oauthPlugin)))
                 {
                     Uri callbackParam = new Uri(args[0]);
 
@@ -84,7 +84,10 @@ namespace StockWatcher.Core
 
             var response = await client.PostAsync(tokenEndpoint, content);
 
-            return response.Content.ReadAsStringAsync().Result;
+            return await response.Content.ReadAsStringAsync();
+            ///string oAuthResponse = await response.Content.ReadAsStringAsync();
+            // TODO: Parse resposne for access_token, api_server, expires_in, refresh_token, token_type
+
         }
     }
 }

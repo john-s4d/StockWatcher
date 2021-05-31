@@ -9,16 +9,17 @@ namespace StockWatcher.Core
     {
         private AppDataManager _appData;        
 
+        //public event Action<IPlugin, bool> OnInstanceEnabledChanged;
+
         public IReadOnlyCollection<PluginLibrary> Libraries => _libraries.AsReadOnly();
 
         private List<PluginLibrary> _libraries;
 
-        public PluginsManager(AppDataManager appData)
-        {
-            _appData = appData;
-        }
+        public PluginsManager() { }
 
-        public void Load() { 
+        public void Load(AppDataManager appData, Program core)
+        {
+            _appData = appData;            
 
             _libraries = _appData.Read<List<PluginLibrary>>("plugins");
 
@@ -30,26 +31,26 @@ namespace StockWatcher.Core
             // Hookup Hosts
             foreach (PluginClass pluginClass in GetPluginClassesHavingEnabledInterfaces())
             {
+                //pluginClass.OnInstanceEnabledChanged += PluginClass_OnInstanceEnabledChanged;
+
                 foreach (PluginInterface pluginInterface in pluginClass.Interfaces)
                 {
                     if (pluginInterface.Enabled && !pluginClass.Instance.Activated)
-                    {
-                        pluginClass.Instance.Activate(new PluginHost(pluginClass.Instance));
+                    {   
+                        pluginClass.Instance.Activate(new PluginHost(core));
                     }
                 }
-                pluginClass.OnInstanceEnabledChanged += PluginClass_OnInstanceEnabledChanged;
             }
         }
 
-        private void PluginClass_OnInstanceEnabledChanged(PluginInterface plugin, bool enabled)
+        /*
+        private void PluginClass_OnInstanceEnabledChanged(PluginClass plugin, bool enabled)
         {
-            // TODO: Update Settings with new plugin info
-        }
-
-        public List<IPlugin> Get(string name)
-        {
-            return Get<IPlugin>(name);
-        }
+            if (typeof(ISettingsPlugin).IsAssignableFrom(plugin.GetType()))
+            {
+                _core.Settings.Merge(plugin as ISettingsPlugin);
+            }
+        }*/
 
         internal List<T> Get<T>(string name = null)
             where T : class, IPlugin
@@ -107,9 +108,8 @@ namespace StockWatcher.Core
         }
 
         public void AddLibrary(PluginLibrary library)
-        {            
+        {
             _libraries.Add(library);
-
         }
 
         public void Remove(PluginLibrary library)

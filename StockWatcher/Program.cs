@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace StockWatcher.UI
 {
     static class Program
     {
-        private const string APPLICATION_NAME = "StockWatcher";        
+        private const string APPLICATION_NAME = "StockWatcher";
 
         private static Core.Program _core;
 
@@ -29,8 +30,10 @@ namespace StockWatcher.UI
             */
 
 #if DEBUG
-
-            //MessageBox.Show("Attach Debugger Now");
+            if (!Debugger.IsAttached)
+            {
+                MessageBox.Show($"Attach Debugger Now: {Process.GetCurrentProcess().ProcessName}");
+            }
 #endif
 
             Core.AppDataManager appData = new Core.AppDataManager(GetAppDataPath());
@@ -38,7 +41,7 @@ namespace StockWatcher.UI
             _core = new Core.Program(appData);
 
             // Handling OAuth Callback
-            if (_core.OAuthHook(args)) { return; } 
+            if (_core.OAuthHook(args)) { return; }
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

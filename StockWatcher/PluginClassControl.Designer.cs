@@ -60,7 +60,7 @@ namespace StockWatcher.UI
             this.flPluginInterfaces.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flPluginInterfaces.Location = new System.Drawing.Point(5, 39);
             this.flPluginInterfaces.Name = "flPluginInterfaces";
-            this.flPluginInterfaces.Size = new System.Drawing.Size(484, 102);
+            this.flPluginInterfaces.Size = new System.Drawing.Size(484, 206);
             this.flPluginInterfaces.TabIndex = 4;
             // 
             // PluginClassControl
@@ -72,7 +72,7 @@ namespace StockWatcher.UI
             this.Controls.Add(this.lbNameVer);
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "PluginClassControl";
-            this.Size = new System.Drawing.Size(492, 144);
+            this.Size = new System.Drawing.Size(492, 248);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -7,7 +7,7 @@ namespace StockWatcher.Common
         IPluginHost<IPlugin> Host { get; }
         string Name { get; }        
         bool Activated { get; }
-
         void Activate(IPluginHost<IPlugin> pluginHost);
+        //void Activate();
     }
 }

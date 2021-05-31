@@ -22,8 +22,8 @@ namespace StockWatcher.Common
 
         public override bool CanConvert(Type objectType)
         {
-            if (objectType == typeof(SettingsDictionary)) return true;
-            if (objectType == typeof(IConvertible)) return true;
+            if (objectType == typeof(SettingsDictionary)) { return true; }
+            if (objectType == typeof(IConvertible)) { return true; }
             return false;
         }
 
@@ -35,14 +35,16 @@ namespace StockWatcher.Common
                 if (_typeMap.ContainsKey(reader.Path))
                 {   
                     target = (SettingsDictionary)Activator.CreateInstance(_typeMap[reader.Path]);
+                    serializer.Populate(reader, target);
                 } 
                 else
                 {
-                    target = new SettingsDictionary();
-                }                
-                serializer.Populate(reader, target);
+                    object obj = serializer.Deserialize(reader);
+                    target = null;
+                }
                 return target;
             }
+
             if (objectType == typeof(IConvertible))
             {   
                 return (IConvertible)reader.Value;

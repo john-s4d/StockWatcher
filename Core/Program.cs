@@ -9,20 +9,19 @@ using System.Threading.Tasks;
 namespace StockWatcher.Core
 {
     public class Program
-    {
-        public PluginsManager Plugins { get; internal set; }
-        public SettingsManager Settings { get; internal set; }
+    {   
+        public PluginsManager Plugins { get; } = new PluginsManager();
+        public SettingsManager Settings { get; } = new SettingsManager();
+        public LoggingManager Logger { get; } = new LoggingManager();
 
         public Program(AppDataManager appData)
         {
-            Plugins = new PluginsManager(appData);
-            Settings = new SettingsManager(appData);
-
-            Plugins.Load();
-
-            Settings.Merge(Plugins.Get<ISettingsPlugin>());
+            Plugins.Load(appData, this);
+            
             Settings.Merge(new OAuthSettings());
-            Settings.Load();
+            Settings.Merge(Plugins.Get<ISettingsPlugin>());
+
+            Settings.Load(appData);
         }
 
         public bool OAuthHook(string[] args)
