@@ -14,10 +14,10 @@ namespace StockWatcher.QuestradeApi
             // SetEncrypted(nameof(OAuthRefreshToken)); // TODO: Implement Encryption
         }
 
-        public string OAuthClientId { get; }        
+        public string OAuthClientId { get; internal set; }        
 
-        //[SettingEncrypted]
-        internal string OAuthRefreshToken { get; }
+        //[SettingEncrypted, SettingHidden]
+        public string OAuthRefreshToken { get; internal set; }
 
         internal new void SetAction(string key, Action action)
         {

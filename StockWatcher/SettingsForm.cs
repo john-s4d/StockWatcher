@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using StockWatcher.Common;
 using StockWatcher.Core;
@@ -41,8 +42,14 @@ namespace StockWatcher.UI
             {
                 SettingControl settingControl = new SettingControl(setting);
                 settingControl.Leave += SettingControl_Leave;
+                setting.PropertyChanged += Setting_PropertyChanged;
                 flpSettings.Controls.Add(settingControl);
             }
+        }
+
+        private void Setting_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            
         }
 
         private void SettingControl_Leave(object sender, EventArgs e)

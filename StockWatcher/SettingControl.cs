@@ -37,7 +37,19 @@ namespace StockWatcher.UI
             txtValue.Text = _setting.Value?.ToString();            
             
             btnAction.Visible = _setting.OnAction != null;
+            _setting.PropertyChanged += _setting_PropertyChanged;
             //ttDescription.SetToolTip(lblLabel, _setting.Description);
+        }
+
+        private void _setting_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(_setting.Value))
+            {
+                if (string.IsNullOrEmpty(txtValue.Text)  || txtValue.Text != (string)_setting.Value)
+                {                    
+                    txtValue.Invoke(new Action(() => txtValue.Text = (string)_setting.Value));
+                }
+            }
         }
 
         private void txtValue_TextChanged(object sender, EventArgs e)
